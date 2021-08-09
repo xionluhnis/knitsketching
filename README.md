@@ -9,7 +9,7 @@ The project page is there: http://knitsketching.csail.mit.edu/
 This implementation deviates slightly from the paper description.
 Notably, it adds support for layer metadata that describes patterns and colorwork on top of the sketches.
 
-This is a prototype, so expect bugs. Some known / typical issues are described below.
+This is a prototype, so expect bugs.
 
 ## Dependencies
 

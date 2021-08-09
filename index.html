@@ -1,0 +1,1367 @@
+<?doctype html>
+<html>
+  <head>
+    <title>Procedural Knitting Editor</title>
+    <!-- styles -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="libs/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="libs/codemirror/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="libs/codemirror/addon/search/matchesonscrollbar.css">
+    <link rel="stylesheet" href="libs/dialog/dialog-polyfill.css" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <dialog id="loadfile"></dialog>
+    <div id="editor">
+      <div class="files">
+        <div class="button load-action" id="load_action">
+          Load
+          <div class="load-menu">
+            <a class="file" id="load">from file</a>
+            <a class="file" id="load_server">from server</a>
+            <!-- <select class="button" id="use"><option value="">from server</option></select> -->
+          </div>
+        </div>
+        <a class="button rounded" id="save">Save</a>
+        <input type="file" id="file" accept=".sk,.svg,.sketch,.json,.k">
+        <input type="file" id="file-add" accept=".sk,.svg,.sketch,.json,.k">
+      </div>
+      <div id="context" class="sidebar">
+        <input type="radio" name="output" class="tab" data-mode="sketch" data-text="Sketch" checked>
+        <input type="radio" name="output" class="tab" data-mode="knitout" data-text="Knitout">
+        <!--
+          <input type="radio" name="output" class="tab" data-mode="simulation" data-text="Sim">
+        -->
+        <input type="radio" name="output" class="tab" data-mode="yarn" data-text="Yarn">
+      </div>
+      <div id="sidebar" class="sidebar">
+        <div class="tab rounded" data-panel="simulation-editor">Sim</div>
+        <div class="tab rounded" data-panel="knitout-editor">Knitout</div>
+        <div class="tab rounded" data-panel="parametric-editor">Parametric</div>
+        <div class="tab rounded" data-panel="program-editor">Programs</div>
+        <div class="tab rounded" data-panel="pattern-editor">Pattern</div>
+        <!-- <div class="tab rounded" data-panel="properties-editor">Props</div> -->
+        <div class="tab rounded" data-panel="history-editor">History</div>
+      </div>
+    </div>
+    <div id="output" class="sketch">
+      <!-- Toolbar -->
+      <div id="toolbar" class="toolbar">
+        <!-- sketch-only toolbar -->
+        <span class="for-sketch shape">
+          <span id="sketch-mode" class="group" data-legend="Mode">
+            <span class="select">
+              <input type="radio" name="sketch-mode" value="shape"    data-text="Shape" checked>
+              <input type="radio" name="sketch-mode" value="linking"  data-text="Linking">
+              <input type="radio" name="sketch-mode" value="kappa"    data-text="Curvature">
+              <input type="radio" name="sketch-mode" value="flow"     data-text="Time">
+              <input type="radio" name="sketch-mode" value="schedule" data-text="Sampling">
+              <input type="radio" name="sketch-mode" value="seam"     data-text="Seam">
+              <input type="radio" name="sketch-mode" value="layer"    data-text="Layers">
+            </span>
+          </span>
+          <span class="group empty">
+            <input type="button" name="skaction" id="undo" title="Undo last action" value="&lt;">
+            <input type="button" name="skaction" id="redo" title="Redo last undone action" value="&gt;" disabled>
+          </span>
+          <span class="group" data-legend="Base">
+            <input type="radio" tabindex="5" name="skaction" id="curve-select" title="(Esc) Select curves and segments" checked>
+            <input type="radio" tabindex="8" name="skaction" id="curve-move"    title="(G)rab or (M)ove a sketch curve">
+            <input type="radio" tabindex="9" name="skaction" id="curve-scale"   title="Re(S)cale a sketch curve">
+          </span>
+          <span class="for-shape for-linking for-flow for-seam for-edit">
+            <span class="group" data-legend="Curve">
+              <input type="radio" tabindex="6" name="skaction" id="curve-create"  title="Create new sketch curve">
+              <input type="radio" tabindex="7" name="skaction" id="curve-delete"  title="(D)elete curve" data-text="&#10007;">
+              <input type="radio" tabindex="8" name="skaction" id="curve-edit"    title="(E)dit existing sketch curve">
+              <input type="radio" name="skaction" id="segment-divide" title="Subdivide segment">
+              <input type="radio" name="skaction" id="node-delete"    title="Delete node">
+            </span>
+          </span>
+          <span class="for-shape for-edit">
+            <span class="group" data-legend="Seg">
+              <input type="radio" name="skaction" id="segment-line"   title="Set as line">
+              <input type="radio" name="skaction" id="segment-quad"   title="Set as quadratic bezier">
+              <input type="radio" name="skaction" id="segment-cubic"  title="Set as cubic bezier">
+            </span>
+            <span class="group" data-legend="Nodes">
+              <input type="radio" name="skaction" id="node-corner"    title="Make node corner (sharp)">
+              <input type="radio" name="skaction" id="node-smooth"    title="Make node smooth">
+              <input type="radio" name="skaction" id="node-symmetric" title="Make node symmetric">
+              <input type="radio" name="skaction" id="node-auto"      title="Make node auto-smooth">
+              <input type="radio" name="skaction" id="node-cr"        title="Make node Catmull-Rom">
+              <i class="separator"></i>
+              <input type="radio" name="cralpha"  id="cr-un" title="Uniform Catmull-Rom"     data-alpha="0"   data-text="&alpha;&#8320;" checked>
+              <input type="radio" name="cralpha"  id="cr-ce" title="Centripetal Catmull-Rom" data-alpha="0.5" data-text="ce">
+              <input type="radio" name="cralpha"  id="cr-ch" title="Chordal Catmull-Rom"     data-alpha="1"   data-text="&alpha;&#8321;">
+            </span>
+          </span>
+          <span class="for-shape for-edit for-edit-smaller">
+            <span class="group" data-legend="Align">
+              <input type="radio" name="skaction" id="align-horizontal" title="Align nodes horizontally">
+              <input type="radio" name="skaction" id="distr-horizontal" title="Distribute nodes horizontally">
+              <input type="radio" name="skaction" id="align-vertical"   title="Align nodes vertically">
+              <input type="radio" name="skaction" id="distr-vertical"   title="Distribute nodes vertically">
+            </span>
+            <span class="group" data-legend="Sym">
+              <input type="radio" name="skaction" id="symmetry"    title="Make a set of points symmetric along its best symmetry axis">
+              <input type="radio" name="skaction" id="symmetry-x"  title="Make a set of points X-symmetric">
+              <input type="radio" name="skaction" id="symmetry-y"  title="Make a set of points Y-symmetric">
+            </span>
+          </span>
+          <span class="for-shape for-linking">
+            <span class="group" data-legend="Length">
+              <input type="radio" name="skaction" id="segment-len-get"  title="Get the length of a segment" data-text="?">
+              <input type="radio" name="skaction" id="segment-len-set"  title="Set the length of a segment while fixing its endpoints, and solving for the control points" data-text="!">
+            </span>
+          </span>
+          <span class="for-linking">
+            <span class="group" data-legend="Link">
+              <input type="radio" name="skaction" id="segment-link"   title="Create link between two segments">
+              <input type="radio" name="skaction" id="segment-unlink" title="Remove link, making segment open">
+            </span>
+          </span>
+          <span class="for-flow">
+            <span class="group" data-legend="Constr">
+              <input type="radio" name="skaction" id="flow-create"      title="Create line-based constraint">
+              <input type="radio" name="skaction" id="flow-set"         title="Set a constraint type (including on borders)">  
+              <!-- <input type="radio" name="skaction" id="flow-parametric"  title="Create parametric constraint"> -->
+              <span id="constraint-type">
+                <input type="radio" name="ctype" id="flow-direction"   title="Set as direction constraint">
+                <input type="radio" name="ctype" id="flow-isoline"     title="Set as isoline constraint" checked>
+                <input type="radio" name="ctype" id="flow-seam"        title="Set as seam attractor">
+                <input type="radio" name="ctype" id="flow-source"      title="Set as source constraint">
+                <input type="radio" name="ctype" id="flow-sink"        title="Set as sink constraint">
+              </span>
+            </span>
+          </span>
+          <span class="for-kappa">
+            <span class="group" data-legend="&kappa;-val">
+              <input type="radio" name="skaction" id="kappa-create"     title="Create point-based constraint">
+              <input type="checkbox" id="kappa-freehand"                title="Freehand vs constrained constraints" data-text="Free">
+              <input type="radio" name="skaction" id="kappa-move"       title="Move a curvature constraint">
+              <input type="radio" name="skaction" id="kappa-set-value"  title="Set a curvature constraint">
+              <input type="radio" name="skaction" id="kappa-set-alpha"  title="Set the influence of a curvature constraint">
+              <input type="radio" name="skaction" id="kappa-delete"     title="Remove a curvature constraint">
+            </span>
+          </span>
+          <span class="for-seam">
+            <span class="group" data-legend="Seam">
+              <input type="radio" name="skaction" id="seam-create"      title="Create a new seam curve">
+              <input type="radio" name="skaction" id="seam-toggle"      title="Toggle the seam mode of any curve segment">  
+              <input type="checkbox" class="wide" id="seam-update"      title="Edit mode for fast wale feedback given seam modifications"
+                data-text="Seam Edit">
+              <span class="range">
+                <input type="range" id="seam-weight" title="Weight of the seam penalty"
+                  min="0" step="0.1" max="10" value="1"
+                  data-env="seamWeight" oninput="this.nextElementSibling.innerHTML = parseFloat(this.value).toFixed(2);">
+                <span class="range-value">0.25</span>
+              </span>
+            </span>
+          </span>
+          <span class="for-schedule">
+            <span class="group" data-legend="Size">
+              <input type="radio" class="wide" name="sksizing" id="sizing-sketch"    title="Use scaled sketch units" data-text="Sketch: 1 mm / px" checked>
+              <input type="radio" name="sksizing" id="sizing-border"    title="Use sized border" data-text="Border: ? mm">
+            </span>
+          </span>
+          <span class="for-schedule for-seam">
+            <span class="group" data-legend="Query">
+              <input type="checkbox" id="show-node"  title="Highlight node"  data-text="n">
+              <input type="range" id="node-range" min="1" max="100">
+              <input type="checkbox" id="show-query" title="Visualize query" data-text="q">
+            </span>
+          </span>
+          <span class="for-layer">
+            <!-- global modifiers-->
+            <span class="group" data-legend="Gauge">
+              <input type="radio" name="gauge" class="left wide"
+                id="full-gauge" data-text="Full" title="Full gauge">
+              <input type="radio" name="gauge" class="right wide"
+                id="half-gauge" data-text="Half" title="Half gauge" checked>
+            </span>
+            <span class="group" data-legend="Subdiv">
+              <input type="radio" name="subdiv" class="left wide"
+                id="subdiv-1" data-text="1" title="No subdivision, using default stitches" checked>
+              <input type="radio" name="subdiv" class="middle wide"
+                id="subdiv-2" data-text="2" title="Subdivision by 2">
+              <input type="radio" name="subdiv" class="middle wide"
+                id="subdiv-4" data-text="4" title="Subdivision by 4">
+              <input type="radio" name="subdiv" class="right wide"
+                id="subdiv-8" data-text="8" title="Subdivision by 8">
+            </span>
+            <span class="group" data-legend="Layers">
+              <input type="radio" name="skaction" id="anchor-create"
+                title="Create a sketch anchor for stitch-level grids"
+                data-text="&#8857;"> <!-- 🞊 -->
+              <input type="radio" name="skaction" id="anchor-toggle"
+                title="Toggle the parameterization of an anchor"
+                data-text="&#8859;"> <!-- ⊛ -->
+              <input type="radio" name="skaction" id="rect-create"
+                title="Create a rectangular grid"
+                data-text="&#8865;"> <!-- ⊡ -->
+              <input type="checkbox" class="wide" id="layer-update"   title="Edit mode for fast stitch program feedback given layer changes"
+                data-text="L-Edit">
+              <input type="checkbox" class="wide" id="retrace" title="Retrace upon update"
+                data-text="RT">
+            </span>
+            <!-- per-layer modifiers
+            <span class="group" data-legend="Local">
+
+            </span>-->
+          </span>
+          <!-- hidden actions -->
+          <span style="display: none;">
+            <input type="radio" name="skaction" id="query-geodesic">
+          </span>
+          <!-- layers on canvas-->
+          <span id="canvasside">
+            <span class="group" id="dispLayer" data-legend="Display">
+              <span class="group" data-legend="General">
+                <input type="checkbox" id="showFlow"
+                  data-text="Ti" title="Display time information"
+                  checked></input>
+                <input type="checkbox" id="showStitches"
+                  data-text="St" title="Display stitch graph"
+                  checked></input>
+                <input type="checkbox" id="showColorFaces"
+                  data-text="TF"  title="Use face-shading for the time visualization"
+                  checked></input>
+                <input type="checkbox" id="showStitchFaces"
+                  data-text="SF"  title="Use face-shading for the stitch programs"
+                  checked></input>
+                <input type="checkbox" id="showIsolines"
+                  data-text="Is" title="Display main interface isolines"
+                  checked></input>
+                <input type="checkbox" id="showFullIsolines"
+                  data-text="FI" title="Display complete isolines upon hover"
+                  checked style="display: none;"></input>
+                <input type="checkbox" id="cacheHIT"
+                  data-text="HI" title="Use double-buffered HIT canvas"
+                  checked style="display: none;"></input>
+              </span>
+              <span class="group" data-legend="Features">
+                <input type="checkbox" id="showBG"
+                  data-text="Bg" title="Show background color"
+                  checked></input>
+                <input type="checkbox" id="showLabels"
+                  data-text="Tx" title="Display sketch labels"
+                  checked></input>
+                <input type="checkbox" id="showLinks"
+                  data-text="Li" title="Display link characters"
+                  checked></input>
+                <input type="checkbox" id="showLength"
+                  data-text="&#8467;" title="Always show the length of edges"></input>
+                <input type="checkbox" id="showFlowConstraints"
+                  data-text="tC" title="Display time constraints"
+                  checked></input>
+                <input type="checkbox" id="showKappaConstraints"
+                  data-text="&kappa;C" title="Display curvature constraints"
+                  checked></input>
+                <input type="checkbox" id="showPCurves"
+                  data-text="PC" title="Display PCurves"
+                  checked></input>
+                <input type="checkbox" id="showSeams"
+                  data-text="Se" title="Display seam annotations"
+                  checked></input>
+                <input type="checkbox" id="showIrregular"
+                  data-text="Ir" title="Highlight irregular stitches"
+                  checked></input>
+                <input type="checkbox" id="showLayers"
+                  data-text="La" title="Display layer annotations"
+                  checked></input>
+                <input type="checkbox" id="previewLayers"
+                  data-text="LP" title="Preview layer patterns"
+                  checked></input>
+              </span>
+            </span>
+            <span class="group" id="renderLayer" data-legend="Render">
+              <span class="hlist">
+                <span class="hfill"></span>
+                <input type="radio" name="skdisplay" id="display-none"    title="Do not render anything">
+                <input type="radio" name="skdisplay" id="display-flow"    title="Display flow direction" data-text="uv">
+                <input type="radio" name="skdisplay" id="display-kappa" title="Display the user-defined curvature" data-text="&kappa;">
+                <input type="radio" name="skdisplay" id="display-time"    title="Display time function"  data-text="t">
+                <input type="radio" name="skdisplay" id="display-stress"  title="Display stress from flow neighborhood"  data-text="&sigma;">
+                <input type="radio" name="skdisplay" id="display-stretch" title="Display local time stretch" data-text="&tau;">
+                <input type="radio" name="skdisplay" id="display-geodesic" title="Display the geodesic distance to a point" data-text="g">
+                <input type="radio" name="skdisplay" id="display-region"  title="Display the isoline segmentation region" data-text="r" checked>
+              </span>
+            </span>
+            <!-- <span class="break"></span> -->
+            <span class="group" id="graphLayer" data-legend="Graph">
+              <input type="checkbox" id="inv_time"
+                  title="Invert time function"
+                  data-env="invertTime" data-text="inverse">
+              <!-- merging -->
+              <div class="slider">
+                <label for="iso_threshold">Min</label>
+                <span class="slider">
+                  <input type="range" id="iso_threshold" class="region"
+                      title="Threshold for region merging"
+                      data-env="minRegionDT" value="0.25" min="0" max="2" step="0.05"
+                      oninput="this.parentElement.nextElementSibling.innerHTML = parseFloat(this.value).toFixed(2);">
+                </span>
+                <span class="region-value">0.25</span>
+              </div>
+              <!-- uniform splitting -->
+              <input type="checkbox" id="split_uniform"
+                  title="Use uniform region splitting"
+                  data-env="uniformRegionSplit" data-text="u-split">
+              <!-- splitting -->
+              <div class="slider usplit">
+                <label for="split_threshold">Max</label>
+                <span class="slider">
+                  <input type="range" id="split_threshold" class="region"
+                    title="Threshold for region splitting"
+                    data-env="maxRegionDT" value="10" min="1" max="10" step="0.1"
+                    oninput="this.parentElement.nextElementSibling.innerHTML = parseFloat(this.value).toFixed(1);">
+                </span>
+                <span class="region-value">10.0</span>
+              </div>
+            </span>
+            <span class="group" id="stitchLayer" data-legend="Stitches">
+              <input type="checkbox" id="show-accuracy" title="Visualize wale and course accuracy" data-text="ac">
+              <input type="checkbox" id="show-trace" title="Visualize trace" data-text="tr">
+              <br>
+              <span class="hlist">
+                <span class="hfill"></span>
+                <input type="radio" name="stitchviz" id="show-none"    title="Do not render anything">
+                <input type="radio" name="stitchviz" id="show-program" title="Visualize program result" data-text="prog" checked>
+                <input type="radio" name="stitchviz" id="show-type"    title="Visualize stitch type" data-text="type">
+                <input type="radio" name="stitchviz" id="show-fyarn"   title="Visualize front yarn" data-text="fyarn">
+                <!-- <input type="radio" name="stitchviz" id="show-byarn"   title="Visualize back yarn" data-text="byarn"> -->
+              </span>
+              <span class="clear"></span>
+            </span>
+            <span class="group" id="computeLayer" data-legend="Compute">
+              <input type="checkbox" class="wide" id="flow-update" title="Update the time when the shape or constraints change"
+                data-text="Time">
+              <input type="checkbox" class="wide" id="schedule-update" title="Sample the program upon time change"
+                data-text="Program">
+            </span>
+          </span>
+        </span>
+        <!-- knitout toolbar -->
+        <span class="for-knitout">
+          <span class="group for-knitout" data-legend="Side">
+            <input type="radio" name="frontSide" class="wide left"  id="front" title="Show front side first" data-text="Front" checked>
+            <input type="radio" name="frontSide" class="wide right" id="back"  title="Show back side first"  data-text="Back">
+            <input type="checkbox" id="twosided" title="Show both sides" data-text="Both" checked>
+          </span>
+          <span class="group" data-legend="Rack">
+            <input type="radio" name="rack-mode" class="wide left"
+              id="rack-explicit" title="Show explicit racking and offsets beds."
+              data-text="Explicit">
+            <input type="radio" name="rack-mode" class="wide middle"
+              id="rack-semi" title="Do not show racking, but show transfers and implicit connections."
+              data-text="Semi">
+            <input type="radio" name="rack-mode" class="wide right"
+              id="rack-implicit" title="Do not show racking, or transfer, only show positive actions."
+              data-text="Implicit" checked>
+          </span>
+          <span class="group" data-legend="Yarn">
+            <input type="checkbox" id="carrierRange" data-text="Range" checked>
+          </span>
+          <span class="group" data-legend="LOD">
+            <select id="knitout-lod" value="-1">
+              <option value="-1" selected>Auto</option>
+              <option value="0">Coarse</option>
+              <option value="1">Medium</option>
+              <option value="2">Finest</option>
+            </select>
+          </span>
+        </span>
+
+        <!-- Settings -->
+        <div id="settings">
+          <i class="icon"></i>
+          <div class="wrap">
+            <ul data-legend="General settings" class="top">
+              <li>
+                <input type="checkbox" id="verbose"
+                  data-env="verbose">
+                <label for="verbose">Verbose</label>
+              </li>
+              <li>
+                <input type="checkbox" id="expert_mode" title="Expert mode"
+                  data-env="expertMode">
+                <label for="expert_mode">Expert mode</label>
+              </li>
+              <li class="expert">
+                <input type="checkbox" id="wasm_debug" title="Verbose debugging in Web Assembly"
+                  data-env="debugWasm">
+                <label for="wasm_debug">WASM debug</label>
+              </li>
+              <li>
+                <input type="checkbox" id="load_globals"
+                  data-env="loadGlobals">
+                <label for="load_globals">Load globals</label>
+              </li>
+            </ul>
+            <ul data-legend="Mesh settings">
+              <li>
+                <label for="showMesh">Render</label>
+                <select id="showMesh" value="none">
+                  <option value="none" selected>None</option>
+                  <option value="mesh">Mesh</option>
+                  <option value="tri-all">D all</option>
+                  <option value="tri-bb">D b-b</option>
+                </select>
+              </li>
+              <li>
+                <label for="robust_meshing">Robust meshing</label>
+                <input type="checkbox" id="robust_meshing"
+                  data-env="robustMeshing" checked>
+              </li>
+              <li class="custom expert">
+                <label for="mesh_profile">Profile</label>
+                <select id="mesh_profile" value="custom">
+                  <option value="custom" selected>Custom</option>
+                  <option value="meshLevels=5,levelFactor=2,minResolution=4">Precise</option>
+                  <option value="meshLevels=3,levelFactor=2,minResolution=8">Medium</option>
+                  <option value="meshLevels=3,levelFactor=2,minResolution=8">Fast</option>
+                </select>
+                <div class="custom">
+                  <!-- number of levels-->
+                  <label for="mesh_levels">Mesh levels</label>
+                  <input type="number"   id="mesh_levels"
+                    data-env="meshLevels" value="3" min="1" max="10" step="1">
+                  <!-- scaling between level -->
+                  <label for="level_factor">Level factor</label>
+                  <select id="level_factor"
+                    data-env="levelFactor" value="2">
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                  </select>
+                  <!-- maximum largest dimension-->
+                  <label for="min_resolution">Min dimension</label>
+                  <input type="number"   id="min_resolution" 
+                    data-env="minResolution" value="8" min="1" max="256" step="1">
+                </div>
+              </li>
+              <li class="expert">
+                <label for="nh_power">NH power</label>
+                <input type="number" id="nh_power"
+                  data-env="nhPower" value="1" min="0" max="10" step="0.1">
+              </li>
+              <li class="expert">
+                <label for="nh_threshold">NH thresh</label>
+                <input type="number" id="nh_threshold"
+                  data-env="nhThreshold" value="0" min="0" max="10" step="0.1">
+              </li>
+              <li>
+                <label for="geodesic_mode">Geodesics</label>
+                <select id="geodesic_mode" value="dijkstra_pheap"
+                  data-env="geodesicMode">
+                  <option value="floyd" title="FLoyd Warshall">FLoyd</option>
+                  <option value="dijkstra-fibheap"
+                    title="Dijkstra using Fibonacci Heap">DFH</option>
+                  <option value="dijkstra-pairheap"
+                    title="Dijkstra using Pairing Heap">DPH</option>
+                  <option value="heat"
+                    title="Geodesics using the Heat Method" selected>Heat</option>
+                </select>
+              </li>
+              <!-- <li>
+                <label for="geodesic_refinement">Refinement</label>
+                <input type="checkbox" id="geodesic_refinement" title="Apply geodesic refinement"
+                  data-env="geodesicRefinement">
+              </li> -->
+              <li class="expert">
+                <label for="refinement_threshold">Refinement threshold</label>
+                <input type="checkbox" id="geodesic_refinement" title="Apply geodesic refinement"
+                  data-env="refineGeodesics" class="small" checked>
+                <input type="number" id="refinement_threshold" title="Threshold for refinement"
+                  data-env="refineThreshold" min="0" max="9" step="0.1" value="3" class="small">
+              </li>
+            </ul>
+            <ul data-legend="T/UV settings">
+              <li>
+                <label for="flow_accuracy">Flow acc</label>
+                <input type="number"   id="flow_accuracy"
+                  data-env="flowAccuracy" value="0.001" min="0" max="0.5" step="0.001">
+              </li>
+              <li>
+                <label for="time_accuracy">Time acc</label>
+                <input type="number"   id="time_accuracy"
+                  data-env="timeAccuracy" value="0.005" min="0" max="0.5" step="0.001">
+              </li>
+              <li class="expert">
+                <label for="time_stretch_range">Stretch range</label>
+                <input type="number"   id="time_stretch_range"
+                  data-env="timeStretchRange" value="0" min="0" max="0.9" step="0.1">
+              </li>
+              <li class="expert">
+                <label for="time_moment">Time moment</label>
+                <input type="number" id="time_moment"
+                  data-env="timeMoment" value="0.1" min="0.9" max="0.9" step="0.001">
+              </li>
+              <li class="expert">
+                <label for="constr_support">Constr. support</label>
+                <input type="number"   id="constr_support"
+                  data-env="constraintSupport" value="1" min="1" step="0.1">
+              </li>
+              <li>
+                <label for="max_time_iter">Max iter</label>
+                <input type="number"   id="max_time_iter"
+                  data-env="maxTimeIter" value="200" min="0" step="1">
+              </li>
+              <li class="expert">
+                <label for="dtime_equation">&Delta;t equation</label>
+                <select id="dtime_equation"
+                  data-env="dtimeEquation" value="2">
+                  <option value="-1">Source</option>
+                  <option value="1">Target</option>
+                  <option value="2" selected>Both</option>
+                </select>
+              </li>
+            </ul>
+            <ul data-legend="Sampling settings">
+              <li>
+                <label for="shaping_factor">Shaping S<sub>max</sub></label>
+                <input type="number" id="shaping_factor" title="Maximum shaping factor (in [1;2])"
+                  data-env="shapingFactor" value="2" min="1" step="0.1" max="2">
+              </li>
+              <li class="expert">
+                <label for="global_shaping">Global S<sub>max</sub></label>
+                <input type="checkbox" id="global_shaping" title="Constrain shaping factor globally"
+                  data-env="globalShaping">
+              </li>
+              <li class="expert">
+                <label for="global_alias">Aliasing</label>
+                <input type="number" id="global_alias" title="Level of variable aliasing (0=none, 1=trivial, 2=basic, 3=complex)"
+                  data-env="globalAliasing" value="2" min="0" step="1" max="3">
+              </li>
+              <li>
+                <label for="global_budget">Budget (glo)</label>
+                <input type="number" id="global_budget" title="Maximum time budget (seconds)"
+                  data-env="globalBudget" value="1" min="0.1" step="0.1" max="600">
+              </li>
+              <li>
+                <label for="local_budget">Budget (loc)</label>
+                <input type="number" id="local_budget" title="Maximum time budget (seconds)"
+                  data-env="localBudget" value="1" min="0.1" step="0.1" max="600">
+              </li>
+              <li>
+                <label for="unif_branching">Uniform branching</label>
+                <input type="checkbox" id="unif_branching" title="Enforce that branching uses uniform sizes"
+                  data-env="uniformBranching">
+              </li>
+              <li>
+                <label for="even_interfaces">Even interfaces</label>
+                <input type="checkbox" id="even_interfaces" title="Enforce that interfaces hold even numbers of stitches"
+                  data-env="evenInterfaces">
+              </li>
+              <li class="expert">
+                <label for="mixed_shaping">Mixed shaping</label>
+                <input type="checkbox" id="mixed_shaping" title="Allow mixed increase/decrease on a course"
+                  data-env="mixedShaping">
+              </li>
+              <li class="expert">
+                <label for="min_wale_diff">Minimize wale difference</label>
+                <input type="checkbox" id="min_wale_diff" title="Minimize the difference between stitch distance and wale distance"
+                  data-env="minWaleDiff">
+              </li>
+            </ul>
+            <ul data-legend="Short-row settings">
+              <li>
+                <label for="sr_mode">Strategy</label>
+                <select id="sr_mode"
+                  data-env="shortRowMode" value="qip">
+                  <option value="none">None</option>
+                  <option value="max">Max</option>
+                  <option value="qip" selected>QIP</option>
+                </select>
+              </li>
+              <li class="expert">
+                <label for="ss_alignment">Sub-sample alignment</label>
+                <select id="ss_alignment" title="Strategy for lateral sub-sample alignment"
+                  data-env="ssAlignment" value="all">
+                  <option value="none">None</option>
+                  <option value="min">Min</option>
+                  <option value="all" selected>All</option>
+                </select>
+              </li>
+              <li class="expert">
+                <label for="ss_depth">Sub-sample depth</label>
+                <input type="number" id="ss_depth"
+                  data-env="ssDepth" value="5" min="1" step="1" max="99">
+              </li>
+              <li class="expert">
+                <label for="ss_threshold">Adaptive threshold</label>
+                <input type="number" id="ss_threshold"
+                  data-env="ssThreshold" value="0.5" min="0" step="0.1" max="9.9">
+              </li>
+              <li>
+                <label for="sr_alignment">Vertical alignment</label>
+                <select id="sr_alignment" title="Vertical alignment of short-rows"
+                  data-env="srAlignment" value="bottom">
+                  <option value="bottom" selected>Bottom</option>
+                  <option value="middle">Middle</option>
+                  <option value="top">Top</option>
+                </select>
+              </li>
+              <li>
+                <label for="subdiv_sr">Subdivision</label>
+                <select id="subdiv_sr" title="Subdivision mechanism"
+                  data-env="subdivSR" value="even">
+                  <option value="even">Even</option>
+                  <option value="first">First</option>
+                  <option value="last">Last</option>
+                </select>
+              </li>
+            </ul>
+            <ul data-legend="Sampling weights">
+              <li>
+                <label for="course_acc">Course acc</label>
+                <input type="number" id="course_acc"
+                  data-env="courseAccWeight" value="1" min="0" step="0.01" max="100">
+              </li>
+              <li>
+                <label for="wale_acc">Wale acc</label>
+                <input type="number" id="wale_acc"
+                  data-env="waleAccWeight" value="1" min="0" step="0.01" max="100">
+              </li>
+              <li>
+                <label for="dist_weight">Wale dist</label>
+                <input type="number" id="dist_weight" title="Weight of wale distance matching"
+                  data-env="distWeight" value="1" min="0" step="0.01" max="100">
+              </li>
+              <li>
+                <label for="seam_weight">Seams</label>
+                <input type="number" id="seam_weight" title="Weight of seam annotations"
+                  data-env="seamWeight" value="1" min="0" step="0.01" max="100">
+              </li>
+              <li class="expert">
+                <label for="flow_weight">Flow</label>
+                <input type="number" id="flow_weight" title="Weight of flow alignment"
+                  data-env="flowWeight" value="0" min="0" step="0.01" max="100">
+              </li>
+              <!-- <li>
+                <label for="reg_weight">Reg layers</label>
+                <input type="number" id="reg_weight" title="Weight of regular layers"
+                  data-env="regWeight" value="1" min="0" step="0.01" max="100">
+              </li> -->
+            </ul>
+            <ul data-legend="Simplicity settings">
+              <li>
+                <label for="global_simp">Global</label>
+                <input type="number" id="global_simp"
+                  data-env="globalSimpWeight" value="0.0" min="0" step="0.01" max="100">
+              </li>
+              <li>
+                <label for="local_simp">Local</label>
+                <input type="number" id="local_simp"
+                  data-env="localSimpWeight" value="0.0" min="0" step="0.01" max="100">
+              </li>
+              <li>
+                <label for="sr_simp">Short rows</label>
+                <input type="number" id="sr_simp" title="Short-row simplicity weight"
+                  data-env="srSimpWeight" value="0.0" min="0" step="0.01" max="100">
+              </li>
+              <li class="expert">
+                <label for="simp_p">SRSP</label>
+                <input type="number" id="simp_p" title="Short-row simplicity power (0, 1 or 2)"
+                  data-env="srSimpPower" value="2" min="0" step="1" max="2">
+              </li>
+              <li class="expert">
+                <label for="local_scaling">Local scaling</label>
+                <input type="checkbox" id="local_scaling" title="Rescale local data to match global solution"
+                  data-env="localScaling">
+              </li>
+            </ul>
+            <ul data-legend="Seam settings">
+              <li>
+                <label for="seam_default">Border default</label>
+                <input type="checkbox" id="seam_default" title="Use seams by default on borders"
+                  data-env="seamByDefault">
+              </li>
+              <li>
+                <label for="seam_support">Support</label>
+                <input type="number" id="seam_support" title="The sample support of any seam"
+                  data-env="seamSupport" value="1.5" min="0.1" step="0.1" max="10">
+              </li>
+              <li>
+                <label for="subdiv_seam">Subdivision</label>
+                <select id="subdiv_seam" data-env="subdivSeam" value="rdiag">
+                  <option value="rdiag" title="Right diagonal" selected>RDiag</option>
+                  <option value="ldiag" title="Left diagonal">LDiag</option>
+                  <option value="rcol"  title="Right column">RCol</option>
+                  <option value="lcol"  title="Left column">LCol</option>
+                  <option value="rand">Random</option>
+                </select>
+              </li>
+              <li>
+                <label for="seam_stop">Stop level</label>
+                <select id="seam_stop" data-env="seamStop" value="nodes">
+                  <option value="none"     title="Complete pipeline">None</option>
+                  <option value="sampling" title="Up to sampling">Sampling</option>
+                  <option value="tracing"  title="Up to tracing">Tracing</option>
+                  <option value="nodes"    title="Up to node creation" selected>Nodes</option>
+                </select>
+              </li>
+            </ul>
+            <ul data-legend="Schedule settings">
+              <li>
+                <label for="use_subgraphs">Independent sub-graphs</label>
+                <input type="checkbox" id="use_subgraphs" title="Whether to filter range of insertions in planar embedding"
+                  data-env="useSubGraphs">
+              </li>
+              <li>
+                <label for="filter_insert">Filter planar insertion</label>
+                <input type="checkbox" id="filter_insert" title="Whether to filter range of insertions in planar embedding"
+                  data-env="filterInsert">
+              </li>
+              <li class="expert">
+                <label for="schedule_type">Algorithm</label>
+                <select id="schedule_type" data-env="scheduleType">
+                  <option value="forward" title="Fast">Forward</option>
+                  <option value="greedy" title="Fast" selected>Greedy</option>
+                  <option value="optimal" title="Slow">Optimal</option>
+                </select>
+              </li>
+              <li class="expert">
+                <label for="offset_error">Offset error</label>
+                <select id="offset_error" data-env="offsetError">
+                  <option value="l0" title="#{x!=y}">L0</option>
+                  <option value="l1" title="|x-y|">L1</option>
+                  <option value="l2" title="(x-y)^2" selected>L2</option>
+                </select>
+              </li>
+              <li class="expert">
+                <label for="flat_layouts">Flat layouts</label>
+                <select id="flat_layouts" title="The type of flat layouts to consider"
+                  data-env="flatLayouts" value="all">
+                  <option value="trivial">Trivial</option>
+                  <option value="simpleFold">1-Fold</option>
+                  <option value="cshape">C-Shape</option>
+                  <option value="all" selected>All</option>
+                </select>
+              </li>
+              <li class="expert">
+                <label for="use_flat_flipping">Flat flipping</label>
+                <input type="checkbox" id="use_flat_flipping" title="Whether to consider side flipping for simple-fold layouts"
+                  data-env="useFlatFlipping">
+              </li>
+              <li>
+                <label for="binding_branches">Binding branches</label>
+                <input type="number"   id="binding_branches"
+                  data-env="bindingBranches"
+                  value="1" min="1" max="999" step="1">
+              </li>
+              <li class="expert">
+                <label for="greedy_tension">Use greedy tension</label>
+                <input type="checkbox" id="greedy_tension" title="Apply greedy rotation tensioning for overconstrained nodes"
+                  data-env="useGreedyTension">
+              </li>
+              <li class="expert">
+                <label for="simple_offsets">Simple offsets</label>
+                <input type="checkbox" id="simple_offsets" title="Do not optimize layout offsets, use LTR packing only"
+                  data-env="simpleOffsets">
+              </li>
+              <li>
+                <label for="max_step_decrease">Step decr.</label>
+                <input type="number" id="max_step_decrease"
+                  data-env="maxStepDecrease"
+                  value="2" min="1" max="99" step="1">
+              </li>
+              <li>
+                <label for="max_step_increase">Step incr.</label>
+                <input type="number"   id="max_step_increase"
+                  data-env="maxStepIncrease"
+                  value="2" min="1" max="99" step="1">
+              </li>
+              <li>
+                <label for="max_shift">Max shift</label>
+                <input type="number"   id="max_shift"
+                  data-env="maxShift"
+                  value="2" min="1" max="99" step="1">
+              </li>
+              <li>
+                <label for="max_pending_yarns">Max pending yarns</label>
+                <input type="number"   id="max_pending_yarns"
+                  data-env="maxPendingYarns"
+                  value="9" min="0" max="99" step="1">
+              </li>
+              <li class="expert">
+                <label for="legacy_slicing">Use legacy slicing</label>
+                <input type="checkbox" id="legacy_slicing"
+                  title="Whether to use the legacy slicing algorithm"
+                  data-env="useLegacySlicing">
+              </li>
+            </ul>
+            <ul data-legend="Knitting settings">
+              <li>
+                <label for="cast_on_type">Cast-on</label>
+                <select id="cast_on_type" title="Cast On Method"
+                  data-env="castOnType">
+                  <option value="interlock" title="Faster">Interlock</option>
+                  <option value="kickback">Kickback</option>
+                </select>
+              </li>
+              <!-- <li>
+                <label for="cast_off_type">Cast-off</label>
+                <select id="cast_off_type" title="Cast Off Method"
+                  data-env="castOffType" value="pickup">
+                  <option value="direct" title="Simpler">Direct</option>
+                  <option value="reverse" title="Better">Reverse</option>
+                  <option value="pickup" title="Looser" selected>Pickup</option>
+                  <option value="none" title="Faster, but unravels">None</option>
+                </select>
+              </li> -->
+              <li>
+                <label for="insert_depth">Insert depth</label>
+                <input type="number"   id="insert_depth"
+                  data-env="insertDepth"
+                  value="3" min="1" max="99" step="1">
+              </li>
+              <li>
+                <label for="cast_off_pick_up">Pick-up stitch</label>
+                <input type="checkbox" id="cast_off_pick_up" title="Use pick-up tucks to loosen the bind off"
+                  data-env="usePickUpStitch" checked>
+              </li>
+              <li>
+                <label for="shaping_type">Shaping</label>
+                <select id="shaping_type" title="Shaping Algorithm in half-gauge"
+                  data-env="shapingAlgorithm">
+                  <option value="cse" title="Collapse-Shift-Expand">CSE</option>
+                  <option value="rs" title="Rotate-Shift">RS</option>
+                </select>
+              </li>
+              <li>
+                <label for="multi_xfer">Multi-transfer</label>
+                <input type="checkbox" id="multi_xfer" title="Repeat transfer passes that have overlapped loops"
+                  data-env="multiTransfer">
+              </li>
+              <li>
+                <label for="reduce_xfer">Reduce transfers</label>
+                <input type="checkbox" id="reduce_xfer" title="Reduce transfers from CSE algorithm"
+                  data-env="reduceTransfers">
+              </li>
+              <li>
+                <label for="increase_type">Increase</label>
+                <select id="increase_type" title="Type of increase stitch"
+                  data-env="increaseType">
+                  <option value="miss" title="Miss increase">Miss</option>
+                  <option value="kickback" title="Kickback increase" selected>Kickback</option>
+                  <option value="split" title="Split increase">Split</option>
+                  <option value="rsplit" title="Reverse split increase">R-Split</option>
+                </select>
+              </li>
+              <li class="expert">
+                <label for="svs">Split via sliders</label>
+                <input type="checkbox" id="svs" title="Whether to split via sliders even when possible via hooks"
+                  data-env="useSVS">
+              </li>
+              <li>
+                <label for="border_type">Direction</label>
+                <select id="border_type" title="Direction of increases"
+                  data-env="borderType">
+                  <option value="in" title="Increase inward">Inward</option>
+                  <option value="out" title="Increase outward" selected>Outward</option>
+                </select>
+              </li>
+              <li class="expert">
+                <label for="increase_stitch">Stitch Number for Increases</label>
+                <input type="checkbox" id="increase_stitch" title="Repeat transfer passes that have overlapped loops"
+                  data-env="useIncreaseStitchNumber" checked>
+              </li>
+              <li>
+                <label for="sr_tucks">SR tucks</label>
+                <input type="checkbox" id="sr_tucks" title="Use short-row boundary tucks"
+                  data-env="useSRTucks">
+              </li>
+              <li>
+                <label for="intarsia_tucks">Intarsia tucks</label>
+                <select id="intarsia_tucks"
+                  data-env="intarsiaTucks" value="both">
+                  <option value="both"  title="Tuck both sides" selected>Both</option>
+                  <option value="ccw"   title="Tuck CCW side">CCW</option>
+                  <option value="cw"    title="Tuck CW Side">CW</option>
+                  <option value="none"  title="Do not tuck">None</option>
+                </select>
+              </li>
+              <li>
+                <label for="intarsia_side">Tucking side</label>
+                <select id="intarsia_side"
+                  data-env="intarsiaSide" value="after">
+                  <option value="after"  title="Tuck after the last stitch" selected>After</option>
+                  <option value="before" title="Tuck before the first stitch">Before</option>
+                </select>
+              </li>
+              <li>
+                <label for="safe_tucks">Safe tucks</label>
+                <input type="checkbox" id="safe_tucks"
+                  title="Only use tucks (SR or intarsia) when safe"
+                  data-env="safeTucks" checked>
+              </li>
+              <li class="expert">
+                <label for="intarsia_passes">Max intarsia passes</label>
+                <input type="number"   id="intarsia_passes"
+                  data-env="intarsiaPasses" title="Threshold before allowing yarn switch"
+                  value="0" min="0" max="9" step="1">
+              </li>
+              <li class="expert">
+                <label for="intarsia_switch">Yarn switch on intarsia tuck</label>
+                <input type="checkbox" id="intarsia_switch"
+                  title="Switch yarn when tracing encounters an intarsia tuck"
+                  data-env="intarsiaSwitch" checked>
+              </li>
+            </ul>
+            <ul data-legend="Export settings">
+              <li>
+                <label for="kzip">Zipped .K</label>
+                <input type="checkbox" id="kzip">
+              </li>
+              <li class="expert">
+                <label for="export_cw">Graph labels</label>
+                <input type="checkbox" id="export_cw"
+                  data-env="exportCW" checked>
+              </li>
+              <!-- <li>
+                <label for="use_dscs">Use DSCS</label>
+                <input id="use_dscs" type="checkbox" title="Digital Stitch Control System"
+                  data-env="useDSCS">
+              </li> -->
+              <li class="expert">
+                <label for="label_style">Label style</label>
+                <input id="label_style" type="text" title="Javascript label style"
+                  data-env="labelStyle" value="16px Arial">
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Output layers -->
+      <div id="textui" class="for-sketch">
+        <template id="output-text-entry">
+          <div class="entry">
+            <span class="message"></span>
+            <span class="count"></span>
+          </div>
+        </template>
+        <input type="checkbox" id="output-text-state" checked>
+        <div id="output-text">No error</div>
+        <input type="checkbox" id="output-user-state" checked>
+        <div id="output-user">Zoom: 100</div>
+      </div>
+      <div id="output-sketch"></div>
+      <div id="output-knitout"></div>
+      <div id="output-yarn">
+        <h2>Settings Editor</h2>
+        <div class="options">
+          <label for="settings_target">Target</label>
+          <select id="settings_target">
+            <option value="sizing">Yarn Sizing</option>
+            <option value="carriers">Yarn Carriers</option>
+          </select>
+          <a class="button" id="load_settings">Load</a>
+          <a class="button" id="save_settings">Save</a>
+          <input type="file" id="file_settings" accept=".json">
+        </div>
+        <textarea id="settings_editor" class="texteditor" placeholder="Write your configuration here"
+            rows="20">{}</textarea>
+        <div class="info" id="settings_info"></div>
+      </div>
+    </div>
+
+    <!-- History panel -->
+    <div id="history-editor" class="panel closed">
+      <h2>History</h2>
+      <div class="options">
+        <label for="history-type">When</label>
+        <select id="history-type" value="by-action">
+          <option value="by-action" selected>Every action</option>
+          <option value="by-time">Every 5s</option>
+          <option value="none">No history</option>
+        </select>
+        <label for="history-size">Size</label>
+        <select id="history-size" value="10000">
+          <option value="inf" selected>No limit</option>
+          <option value="10000">10k entries</option>
+          <option value="1000">1000 entries</option>
+          <option value="100">100 entries</option>
+          <option value="10">10 entries</option>
+        </select>
+      </div>
+      <ul id="history">
+        <li>
+          <span class="time">Right now</span>
+          <span class="summary">Initial</span>
+        </li>
+      </ul>
+      <a class="button" id="save_history">Export history</a>
+      <a class="button" id="load_history">Load history</a>
+      <input type="file" id="file_history" accept=".json">
+    </div>
+
+    <!-- Program panel -->
+    <div id="program-editor" class="panel closed">
+      <h2>Stitch Program Editor</h2>
+      <div class="options">
+        <a class="button" id="program-load">Load</a>
+        <a class="button" id="program-save">Save</a>
+        <input type="file" id="program-file" accept=".js">
+      </div>
+      <textarea id="program" class="texteditor" placeholder="Write your stitch code here"
+                rows="30">// knitting code</textarea>
+      <div class="info" id="program-info"></div>
+
+      <h2>Documentation</h2>
+      <p>
+      You can use the following methods:
+      </p>
+      <ul id="program-docu" class="docu">
+
+      </ul>
+    </div>
+
+    <!-- Parametric curve panel -->
+    <div id="parametric-editor" class="panel closed">
+      <h2>Parameteric Curve</h2>
+      <ul id="params" class="deg3 cr">
+        <li class="top">
+          <label for="curve-target">Curve</label>
+          <select id="curve-target" value="-1">
+            <option value="-1">-- new --</option>
+          </select>
+        </li>
+        <li>
+          <label for="curve-parent">Parent</label>
+          <input id="curve-parent" type="button" value="" placeholder="Sketch parent">
+        </li>
+        <li class="deg1">
+          <label for="curve-subcurve">SubCurve</label>
+          <input id="curve-subcurve" data-name="subCurve" type="checkbox" placeholder="Sketch parent">
+        </li>
+        <li class="child">
+          <label for="curve-constraint">Constraint</label>
+          <input id="curve-constraint" type="checkbox" title="Whether to associate a constraint with the curve">
+        </li>
+        <li class="seam">
+          <label for="curve-seam">Seam</label>
+          <select id="curve-seam" value="auto" data-name="seamMode">
+            <option value="-1">Off</option>
+            <option value="0">Auto</option>
+            <option value="1">On</option>
+          </select>
+        </li>
+        <li class="no-subcurve">
+          <label for="curve-degree">Degree</label>
+          <input id="curve-degree" type="number" min="1" max="3" step="1" value="3">
+        </li>
+        <li class="deg3">
+          <label for="curve-type">Type</label>
+          <select id="curve-type" value="ss" data-name="cubicType">
+            <option value="ss">Simple Spline</option>
+            <option value="cr">Catmull-Rom</option>
+            <option value="ts">Tangent Spline</option>
+            <option value="ns">Normal Spline</option>
+          </select>
+        </li>
+        <li class="cr">
+          <label for="curve-alpha">CR &alpha;</label>
+          <input id="curve-alpha" data-name="crAlpha" type="range" min="0" max="1" value="0.5" step="0.01">
+          <label for="curve-full">Full</label>
+          <input id="curve-full" data-name="crFull" type="checkbox" checked>
+        </li>
+        <li>
+          <label for="sample-s">Sample S</label>
+          <input id="sample-s" type="button" value="" placeholder="Sample">
+          <div class="deg3">
+            <label for="curve-start-ctrl">Control</label>
+            <select id="curve-start-ctrl" data-name="startCtrl" value="linear">
+              <option value="linear">Linear</option>
+              <option value="normal">Normal</option>
+              <option value="tangent">Tangent</option>
+              <option value="angle">Angle</option>
+            </select>
+            <label for="curve-start-weight">Weight</label>
+            <input id="curve-start-weight" data-name="startWeight"
+                    type="range" min="0" max="1" value="0.333" step="0.01">
+            <div class="angle">
+              <label for="curve-start-sine">Angle</label>
+              <input id="curve-start-sine" data-name="startSine" type="range"
+                      min="-1" value="0" max="1" step="0.01">
+            </div>
+            <div class="normal tangent angle">
+              <label for="curve-start-inv">Invert</label>
+              <input id="curve-start-inv" data-name="startInvert" type="checkbox">
+            </div>
+          </div>
+        </li>
+        <li class="deg2 deg3c">
+          <label for="sample-c0">Sample C0</label>
+          <input id="sample-c0" type="button" value="" placeholder="Sample">
+          <div class="ns ts">
+            <label for="curve-first-weight">Weight</label>
+            <input id="curve-first-weight" data-name="firstWeight"
+                    type="range" min="0" max="1" value="0.333" step="0.01">
+            <label for="curve-first-inv">Invert</label>
+            <input id="curve-first-inv" data-name="firstInvert" type="checkbox">
+          </div>
+        </li>
+        <li class="deg3c">
+          <label for="sample-c1">Sample C1</label>
+          <input id="sample-c1" type="button" value="" placeholder="Sample">
+          <div class="ns ts">
+            <label for="curve-second-weight">Weight</label>
+            <input id="curve-second-weight" data-name="secondWeight"
+                    type="range" min="0" max="1" value="0.333" step="0.01">
+            <label for="curve-second-inv">Invert</label>
+            <input id="curve-second-inv" data-name="secondInvert" type="checkbox">
+          </div>
+        </li>
+        <li>
+          <label for="sample-e">Sample E</label>
+          <input id="sample-e" type="button" value="" placeholder="Sample">
+          <div class="deg3">
+            <label for="curve-end-ctrl">Control</label>
+            <select id="curve-end-ctrl" data-name="endCtrl" value="linear">
+              <option value="linear">Linear</option>
+              <option value="normal">Normal</option>
+              <option value="tangent">Tangent</option>
+              <option value="angle">Angle</option>
+            </select>
+            <label for="curve-end-weight">Weight</label>
+            <input id="curve-end-weight" data-name="endWeight"
+                    type="range" min="0" max="1" value="0.333" step="0.01">
+            <div class="angle">
+              <label for="curve-end-sine">Angle</label>
+              <input id="curve-end-sine" data-name="endSine" type="range"
+                      min="-1" value="0" max="1" step="0.01">
+            </div>
+            <div class="normal tangent angle">
+              <label for="curve-end-inv">Invert</label>
+              <input id="curve-end-inv" data-name="endInvert" type="checkbox">
+            </div>
+          </div>
+        </li>
+        <li class="deg2 bezier">
+          <label for="curve-t">T value</label>
+          <input id="curve-t" data-name="tval" type="range" min="0" max="1" value="0.5" step="0.01">
+        </li>
+        <li class="bezier">
+          <label for="curve-d1">D<sub>1</sub> value</label>
+          <input id="curve-d1" data-name="d1" type="range" min="0" max="100" value="0" step="1">
+        </li>
+      </ul>
+    </div>
+
+    <!-- Knitout panel -->
+    <div id="knitout-editor" class="panel closed">
+      <h2>Knitout Editor</h2>
+      <div class="options">
+        <label for="knitout_target">Target</label>
+        <select id="knitout_target">
+          <option value="">Sketch</option>
+        </select>
+        <a class="button" id="load_knitout">Load</a>
+        <a class="button" id="save_knitout">Save</a>
+        <input type="file" id="file_knitout" accept=".k">
+      </div>
+      <textarea id="knitout" class="texteditor" placeholder="Write your knitout code here"
+                rows="20">;!knitout-2
+    ;;Carriers: 1 2 3 4 5 6 7 8 9 10
+
+    ;Node
+    knit + f0 1
+    knit + f2 1
+    knit - f1 1
+    knit + f0 1 ; $meta=0
+    knit + f1 1 ; $meta=2
+      </textarea>
+      <div class="info" id="knitout_info"></div>
+
+      <h2>Documentation</h2>
+      <p>
+      See the <a href="https://textiles-lab.github.io/knitout/knitout.html">specification</a>.
+      </p>
+      <p>
+      Operations:
+      </p>
+      <ul id="knitout_docu" class="docu">
+      </ul>
+    </div>
+
+    <!-- Simulation panel -->
+    <div id="simulation-editor" class="panel closed">
+      <h2>Sketch Simulation</h2>
+      <div class="options">
+        <select id="mesh-index" value="1">
+          <option value="0">Mesh 0</option>
+          <option value="1">Mesh 1</option>
+          <option value="2">Mesh 2</option>
+        </select>
+        <i class="separator"></i>
+        <select id="mesh-level" value="1">
+          <option value="0">Level 0</option>
+          <option value="1">Level 1</option>
+          <option value="2">Level 2</option>
+        </select>
+        <select id="mesh-engine" style="display: none;">
+          <option value="d3">D3</option>
+          <option value="ngraph">NGraph</option>
+        </select>
+        <i class="separator"></i>
+        <a id="mesh-update" class="button">Update</a>
+        <div class="break"></div>
+        <label>Export</label>
+        <a id="mesh-export-rest" class="button" href="#export-rest">Rest</a>
+        <a id="mesh-export-full" class="button" href="#export-current">Current</a>
+      </div>
+      <div id="output-simulation"></div>
+    </div>
+
+    <!-- Pattern panel -->
+    <div id="pattern-editor" class="panel closed">
+      <h2>Pattern Editor</h2>
+      <div class="options">
+        <!-- file actions -->
+        <span class="group">
+          <a class="button" id="pattern-load">Load</a>
+          <span class="button dropdown">Save
+            <a class="button" id="pattern-save-png">.png</a>
+            <a class="button" id="pattern-save-txt">.txt</a>
+          </span>
+          <input type="file" id="pattern-file" accept=".pat,.txt,.jpg,.png">
+        </span>
+        <!-- size actions -->
+        <span class="group expand">
+          <label for="pattern-width">W</label>
+          <input type="number" id="pattern-width"
+            min="1" max="9999" step="1" value="1">
+          <label for="pattern-height">H</label>
+          <input type="number" id="pattern-height"
+            min="1" max="9999" step="1" value="1">
+          <input type="checkbox" id="pattern-scaling"
+            data-text="Fix ratio">
+        </span>
+        <!-- image actions -->
+        <span class="group">
+          <a class="button" id="pattern-rotate">+90&deg;</a>
+          <a class="button" id="pattern-rotate2">-90&deg;</a>
+          <a class="button" id="pattern-hflip">H-Flip</a>
+          <a class="button" id="pattern-vflip">V-Flip</a>
+        </span>
+        <input type="checkbox" id="pattern-tile" data-text="Tile">
+      </div>
+      <div class="options">
+        <input type="radio" id="brush-none" name="pattern-brush" class="brush" checked>
+        <!-- disk -->
+        <input type="radio" name="pattern-brush" class="brush"
+          data-func="geom.distBetween(p, q, 'l22') <= R*R"
+          data-text="⏺">
+        <!-- diamond-->
+        <input type="radio" name="pattern-brush" class="brush"
+          data-func="geom.distBetween(p, q, 'l1') <= R"
+          data-text="◆">
+        <!-- square -->
+        <input type="radio" name="pattern-brush" class="brush"
+          data-func="Math.abs(p.x - q.x) <= R && Math.abs(p.y - q.y) <= R"
+          data-text="■">
+        <!-- lines -->
+        <input type="radio" name="pattern-brush" class="brush"
+          data-func="Math.abs(p.x - q.x) <= R && Math.abs(p.y - q.y) <= 0.5"
+          data-text="‒">
+        <input type="radio" name="pattern-brush" class="brush"
+          data-func="Math.abs(p.y - q.y) <= R && Math.abs(p.x - q.x) <= 0.5"
+          data-text="|">
+        <!-- brush size -->
+        <input type="range" id="brush-size" min="1" max="100" value="10"
+        oninput="this.nextElementSibling.innerHTML = 'R=' + parseInt(this.value);">
+        <span class="range-value">R=10</span>
+      </div>
+      <canvas id="pattern"></canvas>
+      <h3>Mapping</h3>
+      <template id="mapping-item">
+        <li class="mapping-item">
+          <input class="key" type="radio" name="pattern-mapping" data-text="0">
+          <span class="value">
+            <select value="">
+              <option value="">-</option>
+              <option value="K">K</option>
+              <option value="P">P</option>
+              <option value="L">L</option>
+              <option value="R">R</option>
+              <option value="T">T</option>
+              <option value="M">M</option>
+            </select>
+          </span>
+          <a class="button" title="Remove mapping and merge value with another">x</a>
+        </li>
+      </template>
+      <template id="mapping-new">
+        <li class="mapping-action">
+          <a class="button" title="Create new mapping entry">+</a>
+        </li>
+      </template>
+      <template id="mapping-simplify">
+        <li class="mapping-action">
+          <a class="button" title="Simplify mapping entries">S</a>
+        </li>
+      </template>
+      <ul id="mapping">
+        <li class="mapping-item">
+          <input class="key" type="radio" name="pattern-mapping" data-text="0">
+          <span class="value">
+            <select value="">
+              <option value="" selected>-</option>
+              <option value="K">K</option>
+              <option value="P">P</option>
+              <option value="L">L</option>
+              <option value="R">R</option>
+              <option value="T">T</option>
+              <option value="M">M</option>
+            </select>
+          </span>
+          <a class="button">x</a>
+        </li>
+        <li class="mapping-item">
+          <input class="key" type="radio" name="pattern-mapping" data-text="1" checked>
+          <span class="value">
+            <select value="K">
+              <option value="">-</option>
+              <option value="K" selected>K</option>
+              <option value="P">P</option>
+              <option value="L">L</option>
+              <option value="R">R</option>
+              <option value="T">T</option>
+              <option value="M">M</option>
+            </select>
+          </span>
+          <a class="button">x</a>
+        </li>
+        <li class="mapping-new"><a class="button" title="Create new mapping entry">+</a></li>
+      </ul>
+    </div>
+
+    <!-- Properties panel-->
+    <div id="properties-editor" class="panel closed">
+      <h2>Properties</h2>
+      <div class="path">
+        <a id="prop-parent" class="hidden">&lt;</a>
+        <span id="prop-current">Anchor #0</span>
+      </div>
+      <ul id="prop-list">
+        
+      </ul>
+    </div>
+
+    <script type="text/javascript" src="js/sketching.js"></script>
+    <script type="text/javascript" src="libs/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/dialog/dialog.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/searchcursor.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/search.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/scroll/annotatescrollbar.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/matchesonscrollbar.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/jump-to-line.js"></script>
+    <script type="text/javascript" src="libs/codemirror/mode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="assets/codemirror/knitout.js"></script>
+    <script type="text/javascript" src="libs/dialog/dialog-polyfill.js"></script>
+  </body>
+</html>
