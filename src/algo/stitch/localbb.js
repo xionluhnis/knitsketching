@@ -4,10 +4,11 @@
 // modules
 const assert = require('../../assert.js');
 const SNBranchAndBound = require('./branchbound.js');
+const { basePath } = require('../../wasm.js');
 const ls_module = require('../../../libs/nlopt-wasm/local_sampling.js');
 let ls = ls_module({
   locateFile: function(path){
-    return location.origin + '/libs/nlopt-wasm/' + path;
+    return basePath + '/libs/nlopt-wasm/' + path;
   }
 }).then(l => ls = l);
 

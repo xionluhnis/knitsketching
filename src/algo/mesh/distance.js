@@ -10,10 +10,11 @@ const Timer = require('../../timer.js');
 const { FibQueue, PairingQueue } = require('../../ds/pqueue.js');
 const RefinedDistanceQueryResult = require('./geodesic.js');
 // wasm for heap method
+const { basePath } = require('../../wasm.js');
 const gd_module = require('../../../libs/geodesic-dist/gdist.js');
 let gd = gd_module({
   locateFile: function(path){
-    return location.origin + '/libs/geodesic-dist/' + path;
+    return basePath + '/libs/geodesic-dist/' + path;
   }
 }).then(g => gd = g);
 

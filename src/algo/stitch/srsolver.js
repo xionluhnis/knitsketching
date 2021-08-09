@@ -5,10 +5,11 @@
 const assert = require('../../assert.js');
 const geom = require('../../geom.js');
 const Timer = require('../../timer.js');
+const { basePath } = require('../../wasm.js');
 const sr_module = require('../../../libs/nlopt-wasm/sr_sampling.js');
 let sr = sr_module({
   locateFile: function(path){
-    return location.origin + '/libs/nlopt-wasm/' + path;
+    return basePath  + '/libs/nlopt-wasm/' + path;
   }
 }).then(m => sr = m);
 const dtw = require('./dtw.js');

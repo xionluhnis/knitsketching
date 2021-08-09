@@ -4,9 +4,10 @@
 // modules
 const assert = require('../assert.js');
 const xfer_module = require('../../libs/autoknit-wasm/plan_transfers.js');
+const { basePath } = require('../wasm.js');
 let xfer = typeof location !== 'undefined' ? xfer_module({
   locateFile: function(path){
-    return location.origin + '/libs/autoknit-wasm/' + path;
+    return basePath + '/libs/autoknit-wasm/' + path;
   }
 }).then(m => xfer = m) : null;
 const { Needle, LEFT, RIGHT } = require('./knitout.js');

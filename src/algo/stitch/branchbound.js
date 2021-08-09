@@ -4,10 +4,11 @@
 // modules
 const assert = require('../../assert.js');
 const Timer = require('../../timer.js');
+const { basePath } = require('../../wasm.js');
 const gs_module = require('../../../libs/nlopt-wasm/global_sampling.js');
 let gs = gs_module({
   locateFile: function(path){
-    return location.origin + '/libs/nlopt-wasm/' + path;
+    return basePath + '/libs/nlopt-wasm/' + path;
   }
 }).then(g => gs = g);
 
