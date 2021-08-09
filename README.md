@@ -37,8 +37,13 @@ If you want to compile the system, you can use npm scripts:
 The system uses a few WebAssembly modules as well as file capabilities (and serving capabilities) that require the environment to be served through a server instead of directly from the file system.
 Some functionalities are working without server, but not all (and it's tested only from the served variant).
 
-The simplest way to serve it is through a script:
-```
+**Note**: the default system is served assuming the base path `/knitsketching`.
+If this is not the case, you have two options:
+1. Use `npm run link` to creates the necessary symlink, or
+2. Change the base path in `basepath.json` and build again to take it into account.
+
+Assuming the base path is properly setup, the simplest way to serve the files is then using the script
+```bash
 npm run serve
 ```
 
