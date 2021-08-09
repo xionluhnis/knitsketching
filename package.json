@@ -51,14 +51,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/xion.luhnis/knitsketching.git"
+    "url": "git+ssh://git@github.com/xionluhnis/knitsketching.git"
   },
   "keywords": [
     "knitting"
   ],
   "author": "Alexandre Kaspar",
   "bugs": {
-    "url": "https://gitlab.com/xion.luhnis/knitsketching/issues"
+    "url": "https://github.com/xionluhnis/knitsketching/issues"
   },
-  "homepage": "https://gitlab.com/xion.luhnis/knitsketching#README"
+  "homepage": "https://github.com/xionluhnis/knitsketching#README"
 }
