@@ -1,0 +1,559 @@
+<div id="settings">
+  <i class="icon"></i>
+  <div class="wrap">
+    <ul data-legend="General settings" class="top">
+      <li>
+        <input type="checkbox" id="verbose"
+          data-env="verbose">
+        <label for="verbose">Verbose</label>
+      </li>
+      <li>
+        <input type="checkbox" id="expert_mode" title="Expert mode"
+          data-env="expertMode">
+        <label for="expert_mode">Expert mode</label>
+      </li>
+      <li class="expert">
+        <input type="checkbox" id="wasm_debug" title="Verbose debugging in Web Assembly"
+          data-env="debugWasm">
+        <label for="wasm_debug">WASM debug</label>
+      </li>
+      <li>
+        <input type="checkbox" id="load_globals"
+          data-env="loadGlobals">
+        <label for="load_globals">Load globals</label>
+      </li>
+    </ul>
+    <ul data-legend="Mesh settings">
+      <li>
+        <label for="showMesh">Render</label>
+        <select id="showMesh" value="none">
+          <option value="none" selected>None</option>
+          <option value="mesh">Mesh</option>
+          <option value="tri-all">D all</option>
+          <option value="tri-bb">D b-b</option>
+        </select>
+      </li>
+      <li>
+        <label for="robust_meshing">Robust meshing</label>
+        <input type="checkbox" id="robust_meshing"
+          data-env="robustMeshing" checked>
+      </li>
+      <li class="custom expert">
+        <label for="mesh_profile">Profile</label>
+        <select id="mesh_profile" value="custom">
+          <option value="custom" selected>Custom</option>
+          <option value="meshLevels=5,levelFactor=2,minResolution=4">Precise</option>
+          <option value="meshLevels=3,levelFactor=2,minResolution=8">Medium</option>
+          <option value="meshLevels=3,levelFactor=2,minResolution=8">Fast</option>
+        </select>
+        <div class="custom">
+          <!-- number of levels-->
+          <label for="mesh_levels">Mesh levels</label>
+          <input type="number"   id="mesh_levels"
+            data-env="meshLevels" value="3" min="1" max="10" step="1">
+          <!-- scaling between level -->
+          <label for="level_factor">Level factor</label>
+          <select id="level_factor"
+            data-env="levelFactor" value="2">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="8">8</option>
+          </select>
+          <!-- maximum largest dimension-->
+          <label for="min_resolution">Min dimension</label>
+          <input type="number"   id="min_resolution" 
+            data-env="minResolution" value="8" min="1" max="256" step="1">
+        </div>
+      </li>
+      <li class="expert">
+        <label for="nh_power">NH power</label>
+        <input type="number" id="nh_power"
+          data-env="nhPower" value="1" min="0" max="10" step="0.1">
+      </li>
+      <li class="expert">
+        <label for="nh_threshold">NH thresh</label>
+        <input type="number" id="nh_threshold"
+          data-env="nhThreshold" value="0" min="0" max="10" step="0.1">
+      </li>
+      <li>
+        <label for="geodesic_mode">Geodesics</label>
+        <select id="geodesic_mode" value="dijkstra_pheap"
+          data-env="geodesicMode">
+          <option value="floyd" title="FLoyd Warshall">FLoyd</option>
+          <option value="dijkstra-fibheap"
+            title="Dijkstra using Fibonacci Heap">DFH</option>
+          <option value="dijkstra-pairheap"
+            title="Dijkstra using Pairing Heap">DPH</option>
+          <option value="heat"
+            title="Geodesics using the Heat Method" selected>Heat</option>
+        </select>
+      </li>
+      <!-- <li>
+        <label for="geodesic_refinement">Refinement</label>
+        <input type="checkbox" id="geodesic_refinement" title="Apply geodesic refinement"
+          data-env="geodesicRefinement">
+      </li> -->
+      <li class="expert">
+        <label for="refinement_threshold">Refinement threshold</label>
+        <input type="checkbox" id="geodesic_refinement" title="Apply geodesic refinement"
+          data-env="refineGeodesics" class="small" checked>
+        <input type="number" id="refinement_threshold" title="Threshold for refinement"
+          data-env="refineThreshold" min="0" max="9" step="0.1" value="3" class="small">
+      </li>
+    </ul>
+    <ul data-legend="T/UV settings">
+      <li>
+        <label for="flow_accuracy">Flow acc</label>
+        <input type="number"   id="flow_accuracy"
+          data-env="flowAccuracy" value="0.001" min="0" max="0.5" step="0.001">
+      </li>
+      <li>
+        <label for="time_accuracy">Time acc</label>
+        <input type="number"   id="time_accuracy"
+          data-env="timeAccuracy" value="0.005" min="0" max="0.5" step="0.001">
+      </li>
+      <li class="expert">
+        <label for="time_stretch_range">Stretch range</label>
+        <input type="number"   id="time_stretch_range"
+          data-env="timeStretchRange" value="0" min="0" max="0.9" step="0.1">
+      </li>
+      <li class="expert">
+        <label for="time_moment">Time moment</label>
+        <input type="number" id="time_moment"
+          data-env="timeMoment" value="0.1" min="0.9" max="0.9" step="0.001">
+      </li>
+      <li class="expert">
+        <label for="constr_support">Constr. support</label>
+        <input type="number"   id="constr_support"
+          data-env="constraintSupport" value="1" min="1" step="0.1">
+      </li>
+      <li>
+        <label for="max_time_iter">Max iter</label>
+        <input type="number"   id="max_time_iter"
+          data-env="maxTimeIter" value="200" min="0" step="1">
+      </li>
+      <li class="expert">
+        <label for="dtime_equation">&Delta;t equation</label>
+        <select id="dtime_equation"
+          data-env="dtimeEquation" value="2">
+          <option value="-1">Source</option>
+          <option value="1">Target</option>
+          <option value="2" selected>Both</option>
+        </select>
+      </li>
+    </ul>
+    <ul data-legend="Sampling settings">
+      <li>
+        <label for="shaping_factor">Shaping S<sub>max</sub></label>
+        <input type="number" id="shaping_factor" title="Maximum shaping factor (in [1;2])"
+          data-env="shapingFactor" value="2" min="1" step="0.1" max="2">
+      </li>
+      <li class="expert">
+        <label for="global_shaping">Global S<sub>max</sub></label>
+        <input type="checkbox" id="global_shaping" title="Constrain shaping factor globally"
+          data-env="globalShaping">
+      </li>
+      <li class="expert">
+        <label for="global_alias">Aliasing</label>
+        <input type="number" id="global_alias" title="Level of variable aliasing (0=none, 1=trivial, 2=basic, 3=complex)"
+          data-env="globalAliasing" value="2" min="0" step="1" max="3">
+      </li>
+      <li>
+        <label for="global_budget">Budget (glo)</label>
+        <input type="number" id="global_budget" title="Maximum time budget (seconds)"
+          data-env="globalBudget" value="1" min="0.1" step="0.1" max="600">
+      </li>
+      <li>
+        <label for="local_budget">Budget (loc)</label>
+        <input type="number" id="local_budget" title="Maximum time budget (seconds)"
+          data-env="localBudget" value="1" min="0.1" step="0.1" max="600">
+      </li>
+      <li>
+        <label for="unif_branching">Uniform branching</label>
+        <input type="checkbox" id="unif_branching" title="Enforce that branching uses uniform sizes"
+          data-env="uniformBranching">
+      </li>
+      <li>
+        <label for="even_interfaces">Even interfaces</label>
+        <input type="checkbox" id="even_interfaces" title="Enforce that interfaces hold even numbers of stitches"
+          data-env="evenInterfaces">
+      </li>
+      <li class="expert">
+        <label for="mixed_shaping">Mixed shaping</label>
+        <input type="checkbox" id="mixed_shaping" title="Allow mixed increase/decrease on a course"
+          data-env="mixedShaping">
+      </li>
+      <li class="expert">
+        <label for="min_wale_diff">Minimize wale difference</label>
+        <input type="checkbox" id="min_wale_diff" title="Minimize the difference between stitch distance and wale distance"
+          data-env="minWaleDiff">
+      </li>
+    </ul>
+    <ul data-legend="Short-row settings">
+      <li>
+        <label for="sr_mode">Strategy</label>
+        <select id="sr_mode"
+          data-env="shortRowMode" value="qip">
+          <option value="none">None</option>
+          <option value="max">Max</option>
+          <option value="qip" selected>QIP</option>
+        </select>
+      </li>
+      <li class="expert">
+        <label for="ss_alignment">Sub-sample alignment</label>
+        <select id="ss_alignment" title="Strategy for lateral sub-sample alignment"
+          data-env="ssAlignment" value="all">
+          <option value="none">None</option>
+          <option value="min">Min</option>
+          <option value="all" selected>All</option>
+        </select>
+      </li>
+      <li class="expert">
+        <label for="ss_depth">Sub-sample depth</label>
+        <input type="number" id="ss_depth"
+          data-env="ssDepth" value="5" min="1" step="1" max="99">
+      </li>
+      <li class="expert">
+        <label for="ss_threshold">Adaptive threshold</label>
+        <input type="number" id="ss_threshold"
+          data-env="ssThreshold" value="0.5" min="0" step="0.1" max="9.9">
+      </li>
+      <li>
+        <label for="sr_alignment">Vertical alignment</label>
+        <select id="sr_alignment" title="Vertical alignment of short-rows"
+          data-env="srAlignment" value="bottom">
+          <option value="bottom" selected>Bottom</option>
+          <option value="middle">Middle</option>
+          <option value="top">Top</option>
+        </select>
+      </li>
+      <li>
+        <label for="subdiv_sr">Subdivision</label>
+        <select id="subdiv_sr" title="Subdivision mechanism"
+          data-env="subdivSR" value="even">
+          <option value="even">Even</option>
+          <option value="first">First</option>
+          <option value="last">Last</option>
+        </select>
+      </li>
+    </ul>
+    <ul data-legend="Sampling weights">
+      <li>
+        <label for="course_acc">Course acc</label>
+        <input type="number" id="course_acc"
+          data-env="courseAccWeight" value="1" min="0" step="0.01" max="100">
+      </li>
+      <li>
+        <label for="wale_acc">Wale acc</label>
+        <input type="number" id="wale_acc"
+          data-env="waleAccWeight" value="1" min="0" step="0.01" max="100">
+      </li>
+      <li>
+        <label for="dist_weight">Wale dist</label>
+        <input type="number" id="dist_weight" title="Weight of wale distance matching"
+          data-env="distWeight" value="1" min="0" step="0.01" max="100">
+      </li>
+      <li>
+        <label for="seam_weight">Seams</label>
+        <input type="number" id="seam_weight" title="Weight of seam annotations"
+          data-env="seamWeight" value="1" min="0" step="0.01" max="100">
+      </li>
+      <li class="expert">
+        <label for="flow_weight">Flow</label>
+        <input type="number" id="flow_weight" title="Weight of flow alignment"
+          data-env="flowWeight" value="0" min="0" step="0.01" max="100">
+      </li>
+      <!-- <li>
+        <label for="reg_weight">Reg layers</label>
+        <input type="number" id="reg_weight" title="Weight of regular layers"
+          data-env="regWeight" value="1" min="0" step="0.01" max="100">
+      </li> -->
+    </ul>
+    <ul data-legend="Simplicity settings">
+      <li>
+        <label for="global_simp">Global</label>
+        <input type="number" id="global_simp"
+          data-env="globalSimpWeight" value="0.0" min="0" step="0.01" max="100">
+      </li>
+      <li>
+        <label for="local_simp">Local</label>
+        <input type="number" id="local_simp"
+          data-env="localSimpWeight" value="0.0" min="0" step="0.01" max="100">
+      </li>
+      <li>
+        <label for="sr_simp">Short rows</label>
+        <input type="number" id="sr_simp" title="Short-row simplicity weight"
+          data-env="srSimpWeight" value="0.0" min="0" step="0.01" max="100">
+      </li>
+      <li class="expert">
+        <label for="simp_p">SRSP</label>
+        <input type="number" id="simp_p" title="Short-row simplicity power (0, 1 or 2)"
+          data-env="srSimpPower" value="2" min="0" step="1" max="2">
+      </li>
+      <li class="expert">
+        <label for="local_scaling">Local scaling</label>
+        <input type="checkbox" id="local_scaling" title="Rescale local data to match global solution"
+          data-env="localScaling">
+      </li>
+    </ul>
+    <ul data-legend="Seam settings">
+      <li>
+        <label for="seam_default">Border default</label>
+        <input type="checkbox" id="seam_default" title="Use seams by default on borders"
+          data-env="seamByDefault">
+      </li>
+      <li>
+        <label for="seam_support">Support</label>
+        <input type="number" id="seam_support" title="The sample support of any seam"
+          data-env="seamSupport" value="1.5" min="0.1" step="0.1" max="10">
+      </li>
+      <li>
+        <label for="subdiv_seam">Subdivision</label>
+        <select id="subdiv_seam" data-env="subdivSeam" value="rdiag">
+          <option value="rdiag" title="Right diagonal" selected>RDiag</option>
+          <option value="ldiag" title="Left diagonal">LDiag</option>
+          <option value="rcol"  title="Right column">RCol</option>
+          <option value="lcol"  title="Left column">LCol</option>
+          <option value="rand">Random</option>
+        </select>
+      </li>
+      <li>
+        <label for="seam_stop">Stop level</label>
+        <select id="seam_stop" data-env="seamStop" value="nodes">
+          <option value="none"     title="Complete pipeline">None</option>
+          <option value="sampling" title="Up to sampling">Sampling</option>
+          <option value="tracing"  title="Up to tracing">Tracing</option>
+          <option value="nodes"    title="Up to node creation" selected>Nodes</option>
+        </select>
+      </li>
+    </ul>
+    <ul data-legend="Schedule settings">
+      <li>
+        <label for="use_subgraphs">Independent sub-graphs</label>
+        <input type="checkbox" id="use_subgraphs" title="Whether to filter range of insertions in planar embedding"
+          data-env="useSubGraphs">
+      </li>
+      <li>
+        <label for="filter_insert">Filter planar insertion</label>
+        <input type="checkbox" id="filter_insert" title="Whether to filter range of insertions in planar embedding"
+          data-env="filterInsert">
+      </li>
+      <li class="expert">
+        <label for="schedule_type">Algorithm</label>
+        <select id="schedule_type" data-env="scheduleType">
+          <option value="forward" title="Fast">Forward</option>
+          <option value="greedy" title="Fast" selected>Greedy</option>
+          <option value="optimal" title="Slow">Optimal</option>
+        </select>
+      </li>
+      <li class="expert">
+        <label for="offset_error">Offset error</label>
+        <select id="offset_error" data-env="offsetError">
+          <option value="l0" title="#{x!=y}">L0</option>
+          <option value="l1" title="|x-y|">L1</option>
+          <option value="l2" title="(x-y)^2" selected>L2</option>
+        </select>
+      </li>
+      <li class="expert">
+        <label for="flat_layouts">Flat layouts</label>
+        <select id="flat_layouts" title="The type of flat layouts to consider"
+          data-env="flatLayouts" value="all">
+          <option value="trivial">Trivial</option>
+          <option value="simpleFold">1-Fold</option>
+          <option value="cshape">C-Shape</option>
+          <option value="all" selected>All</option>
+        </select>
+      </li>
+      <li class="expert">
+        <label for="use_flat_flipping">Flat flipping</label>
+        <input type="checkbox" id="use_flat_flipping" title="Whether to consider side flipping for simple-fold layouts"
+          data-env="useFlatFlipping">
+      </li>
+      <li>
+        <label for="binding_branches">Binding branches</label>
+        <input type="number"   id="binding_branches"
+          data-env="bindingBranches"
+          value="1" min="1" max="999" step="1">
+      </li>
+      <li class="expert">
+        <label for="greedy_tension">Use greedy tension</label>
+        <input type="checkbox" id="greedy_tension" title="Apply greedy rotation tensioning for overconstrained nodes"
+          data-env="useGreedyTension">
+      </li>
+      <li class="expert">
+        <label for="simple_offsets">Simple offsets</label>
+        <input type="checkbox" id="simple_offsets" title="Do not optimize layout offsets, use LTR packing only"
+          data-env="simpleOffsets">
+      </li>
+      <li>
+        <label for="max_step_decrease">Step decr.</label>
+        <input type="number" id="max_step_decrease"
+          data-env="maxStepDecrease"
+          value="2" min="1" max="99" step="1">
+      </li>
+      <li>
+        <label for="max_step_increase">Step incr.</label>
+        <input type="number"   id="max_step_increase"
+          data-env="maxStepIncrease"
+          value="2" min="1" max="99" step="1">
+      </li>
+      <li>
+        <label for="max_shift">Max shift</label>
+        <input type="number"   id="max_shift"
+          data-env="maxShift"
+          value="2" min="1" max="99" step="1">
+      </li>
+      <li>
+        <label for="max_pending_yarns">Max pending yarns</label>
+        <input type="number"   id="max_pending_yarns"
+          data-env="maxPendingYarns"
+          value="9" min="0" max="99" step="1">
+      </li>
+      <li class="expert">
+        <label for="legacy_slicing">Use legacy slicing</label>
+        <input type="checkbox" id="legacy_slicing"
+          title="Whether to use the legacy slicing algorithm"
+          data-env="useLegacySlicing">
+      </li>
+    </ul>
+    <ul data-legend="Knitting settings">
+      <li>
+        <label for="cast_on_type">Cast-on</label>
+        <select id="cast_on_type" title="Cast On Method"
+          data-env="castOnType">
+          <option value="interlock" title="Faster">Interlock</option>
+          <option value="kickback">Kickback</option>
+        </select>
+      </li>
+      <!-- <li>
+        <label for="cast_off_type">Cast-off</label>
+        <select id="cast_off_type" title="Cast Off Method"
+          data-env="castOffType" value="pickup">
+          <option value="direct" title="Simpler">Direct</option>
+          <option value="reverse" title="Better">Reverse</option>
+          <option value="pickup" title="Looser" selected>Pickup</option>
+          <option value="none" title="Faster, but unravels">None</option>
+        </select>
+      </li> -->
+      <li>
+        <label for="insert_depth">Insert depth</label>
+        <input type="number"   id="insert_depth"
+          data-env="insertDepth"
+          value="3" min="1" max="99" step="1">
+      </li>
+      <li>
+        <label for="cast_off_pick_up">Pick-up stitch</label>
+        <input type="checkbox" id="cast_off_pick_up" title="Use pick-up tucks to loosen the bind off"
+          data-env="usePickUpStitch" checked>
+      </li>
+      <li>
+        <label for="shaping_type">Shaping</label>
+        <select id="shaping_type" title="Shaping Algorithm in half-gauge"
+          data-env="shapingAlgorithm">
+          <option value="cse" title="Collapse-Shift-Expand">CSE</option>
+          <option value="rs" title="Rotate-Shift">RS</option>
+        </select>
+      </li>
+      <li>
+        <label for="multi_xfer">Multi-transfer</label>
+        <input type="checkbox" id="multi_xfer" title="Repeat transfer passes that have overlapped loops"
+          data-env="multiTransfer">
+      </li>
+      <li>
+        <label for="reduce_xfer">Reduce transfers</label>
+        <input type="checkbox" id="reduce_xfer" title="Reduce transfers from CSE algorithm"
+          data-env="reduceTransfers">
+      </li>
+      <li>
+        <label for="increase_type">Increase</label>
+        <select id="increase_type" title="Type of increase stitch"
+          data-env="increaseType">
+          <option value="miss" title="Miss increase">Miss</option>
+          <option value="kickback" title="Kickback increase" selected>Kickback</option>
+          <option value="split" title="Split increase">Split</option>
+          <option value="rsplit" title="Reverse split increase">R-Split</option>
+        </select>
+      </li>
+      <li class="expert">
+        <label for="svs">Split via sliders</label>
+        <input type="checkbox" id="svs" title="Whether to split via sliders even when possible via hooks"
+          data-env="useSVS">
+      </li>
+      <li>
+        <label for="border_type">Direction</label>
+        <select id="border_type" title="Direction of increases"
+          data-env="borderType">
+          <option value="in" title="Increase inward">Inward</option>
+          <option value="out" title="Increase outward" selected>Outward</option>
+        </select>
+      </li>
+      <li class="expert">
+        <label for="increase_stitch">Stitch Number for Increases</label>
+        <input type="checkbox" id="increase_stitch" title="Repeat transfer passes that have overlapped loops"
+          data-env="useIncreaseStitchNumber" checked>
+      </li>
+      <li>
+        <label for="sr_tucks">SR tucks</label>
+        <input type="checkbox" id="sr_tucks" title="Use short-row boundary tucks"
+          data-env="useSRTucks">
+      </li>
+      <li>
+        <label for="intarsia_tucks">Intarsia tucks</label>
+        <select id="intarsia_tucks"
+          data-env="intarsiaTucks" value="both">
+          <option value="both"  title="Tuck both sides" selected>Both</option>
+          <option value="ccw"   title="Tuck CCW side">CCW</option>
+          <option value="cw"    title="Tuck CW Side">CW</option>
+          <option value="none"  title="Do not tuck">None</option>
+        </select>
+      </li>
+      <li>
+        <label for="intarsia_side">Tucking side</label>
+        <select id="intarsia_side"
+          data-env="intarsiaSide" value="after">
+          <option value="after"  title="Tuck after the last stitch" selected>After</option>
+          <option value="before" title="Tuck before the first stitch">Before</option>
+        </select>
+      </li>
+      <li>
+        <label for="safe_tucks">Safe tucks</label>
+        <input type="checkbox" id="safe_tucks"
+          title="Only use tucks (SR or intarsia) when safe"
+          data-env="safeTucks" checked>
+      </li>
+      <li class="expert">
+        <label for="intarsia_passes">Max intarsia passes</label>
+        <input type="number"   id="intarsia_passes"
+          data-env="intarsiaPasses" title="Threshold before allowing yarn switch"
+          value="0" min="0" max="9" step="1">
+      </li>
+      <li class="expert">
+        <label for="intarsia_switch">Yarn switch on intarsia tuck</label>
+        <input type="checkbox" id="intarsia_switch"
+          title="Switch yarn when tracing encounters an intarsia tuck"
+          data-env="intarsiaSwitch" checked>
+      </li>
+    </ul>
+    <ul data-legend="Export settings">
+      <li>
+        <label for="kzip">Zipped .K</label>
+        <input type="checkbox" id="kzip">
+      </li>
+      <li class="expert">
+        <label for="export_cw">Graph labels</label>
+        <input type="checkbox" id="export_cw"
+          data-env="exportCW" checked>
+      </li>
+      <!-- <li>
+        <label for="use_dscs">Use DSCS</label>
+        <input id="use_dscs" type="checkbox" title="Digital Stitch Control System"
+          data-env="useDSCS">
+      </li> -->
+      <li class="expert">
+        <label for="label_style">Label style</label>
+        <input id="label_style" type="text" title="Javascript label style"
+          data-env="labelStyle" value="16px Arial">
+      </li>
+    </ul>
+  </div>
+</div>

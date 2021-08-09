@@ -1,0 +1,330 @@
+<div id="toolbar" class="toolbar">
+  <!-- sketch-only toolbar -->
+  <span class="for-sketch shape">
+    <span id="sketch-mode" class="group" data-legend="Mode">
+      <span class="select">
+        <input type="radio" name="sketch-mode" value="shape"    data-text="Shape" checked>
+        <input type="radio" name="sketch-mode" value="linking"  data-text="Linking">
+        <input type="radio" name="sketch-mode" value="kappa"    data-text="Curvature">
+        <input type="radio" name="sketch-mode" value="flow"     data-text="Time">
+        <input type="radio" name="sketch-mode" value="schedule" data-text="Sampling">
+        <input type="radio" name="sketch-mode" value="seam"     data-text="Seam">
+        <input type="radio" name="sketch-mode" value="layer"    data-text="Layers">
+      </span>
+    </span>
+    <span class="group empty">
+      <input type="button" name="skaction" id="undo" title="Undo last action" value="&lt;">
+      <input type="button" name="skaction" id="redo" title="Redo last undone action" value="&gt;" disabled>
+    </span>
+    <span class="group" data-legend="Base">
+      <input type="radio" tabindex="5" name="skaction" id="curve-select" title="(Esc) Select curves and segments" checked>
+      <input type="radio" tabindex="8" name="skaction" id="curve-move"    title="(G)rab or (M)ove a sketch curve">
+      <input type="radio" tabindex="9" name="skaction" id="curve-scale"   title="Re(S)cale a sketch curve">
+    </span>
+    <span class="for-shape for-linking for-flow for-seam for-edit">
+      <span class="group" data-legend="Curve">
+        <input type="radio" tabindex="6" name="skaction" id="curve-create"  title="Create new sketch curve">
+        <input type="radio" tabindex="7" name="skaction" id="curve-delete"  title="(D)elete curve" data-text="&#10007;">
+        <input type="radio" tabindex="8" name="skaction" id="curve-edit"    title="(E)dit existing sketch curve">
+        <input type="radio" name="skaction" id="segment-divide" title="Subdivide segment">
+        <input type="radio" name="skaction" id="node-delete"    title="Delete node">
+      </span>
+    </span>
+    <span class="for-shape for-edit">
+      <span class="group" data-legend="Seg">
+        <input type="radio" name="skaction" id="segment-line"   title="Set as line">
+        <input type="radio" name="skaction" id="segment-quad"   title="Set as quadratic bezier">
+        <input type="radio" name="skaction" id="segment-cubic"  title="Set as cubic bezier">
+      </span>
+      <span class="group" data-legend="Nodes">
+        <input type="radio" name="skaction" id="node-corner"    title="Make node corner (sharp)">
+        <input type="radio" name="skaction" id="node-smooth"    title="Make node smooth">
+        <input type="radio" name="skaction" id="node-symmetric" title="Make node symmetric">
+        <input type="radio" name="skaction" id="node-auto"      title="Make node auto-smooth">
+        <input type="radio" name="skaction" id="node-cr"        title="Make node Catmull-Rom">
+        <i class="separator"></i>
+        <input type="radio" name="cralpha"  id="cr-un" title="Uniform Catmull-Rom"     data-alpha="0"   data-text="&alpha;&#8320;" checked>
+        <input type="radio" name="cralpha"  id="cr-ce" title="Centripetal Catmull-Rom" data-alpha="0.5" data-text="ce">
+        <input type="radio" name="cralpha"  id="cr-ch" title="Chordal Catmull-Rom"     data-alpha="1"   data-text="&alpha;&#8321;">
+      </span>
+    </span>
+    <span class="for-shape for-edit for-edit-smaller">
+      <span class="group" data-legend="Align">
+        <input type="radio" name="skaction" id="align-horizontal" title="Align nodes horizontally">
+        <input type="radio" name="skaction" id="distr-horizontal" title="Distribute nodes horizontally">
+        <input type="radio" name="skaction" id="align-vertical"   title="Align nodes vertically">
+        <input type="radio" name="skaction" id="distr-vertical"   title="Distribute nodes vertically">
+      </span>
+      <span class="group" data-legend="Sym">
+        <input type="radio" name="skaction" id="symmetry"    title="Make a set of points symmetric along its best symmetry axis">
+        <input type="radio" name="skaction" id="symmetry-x"  title="Make a set of points X-symmetric">
+        <input type="radio" name="skaction" id="symmetry-y"  title="Make a set of points Y-symmetric">
+      </span>
+    </span>
+    <span class="for-shape for-linking">
+      <span class="group" data-legend="Length">
+        <input type="radio" name="skaction" id="segment-len-get"  title="Get the length of a segment" data-text="?">
+        <input type="radio" name="skaction" id="segment-len-set"  title="Set the length of a segment while fixing its endpoints, and solving for the control points" data-text="!">
+      </span>
+    </span>
+    <span class="for-linking">
+      <span class="group" data-legend="Link">
+        <input type="radio" name="skaction" id="segment-link"   title="Create link between two segments">
+        <input type="radio" name="skaction" id="segment-unlink" title="Remove link, making segment open">
+      </span>
+    </span>
+    <span class="for-flow">
+      <span class="group" data-legend="Constr">
+        <input type="radio" name="skaction" id="flow-create"      title="Create line-based constraint">
+        <input type="radio" name="skaction" id="flow-set"         title="Set a constraint type (including on borders)">  
+        <!-- <input type="radio" name="skaction" id="flow-parametric"  title="Create parametric constraint"> -->
+        <span id="constraint-type">
+          <input type="radio" name="ctype" id="flow-direction"   title="Set as direction constraint">
+          <input type="radio" name="ctype" id="flow-isoline"     title="Set as isoline constraint" checked>
+          <input type="radio" name="ctype" id="flow-seam"        title="Set as seam attractor">
+          <input type="radio" name="ctype" id="flow-source"      title="Set as source constraint">
+          <input type="radio" name="ctype" id="flow-sink"        title="Set as sink constraint">
+        </span>
+      </span>
+    </span>
+    <span class="for-kappa">
+      <span class="group" data-legend="&kappa;-val">
+        <input type="radio" name="skaction" id="kappa-create"     title="Create point-based constraint">
+        <input type="checkbox" id="kappa-freehand"                title="Freehand vs constrained constraints" data-text="Free">
+        <input type="radio" name="skaction" id="kappa-move"       title="Move a curvature constraint">
+        <input type="radio" name="skaction" id="kappa-set-value"  title="Set a curvature constraint">
+        <input type="radio" name="skaction" id="kappa-set-alpha"  title="Set the influence of a curvature constraint">
+        <input type="radio" name="skaction" id="kappa-delete"     title="Remove a curvature constraint">
+      </span>
+    </span>
+    <span class="for-seam">
+      <span class="group" data-legend="Seam">
+        <input type="radio" name="skaction" id="seam-create"      title="Create a new seam curve">
+        <input type="radio" name="skaction" id="seam-toggle"      title="Toggle the seam mode of any curve segment">  
+        <input type="checkbox" class="wide" id="seam-update"      title="Edit mode for fast wale feedback given seam modifications"
+          data-text="Seam Edit">
+        <span class="range">
+          <input type="range" id="seam-weight" title="Weight of the seam penalty"
+            min="0" step="0.1" max="10" value="1"
+            data-env="seamWeight" oninput="this.nextElementSibling.innerHTML = parseFloat(this.value).toFixed(2);">
+          <span class="range-value">0.25</span>
+        </span>
+      </span>
+    </span>
+    <span class="for-schedule">
+      <span class="group" data-legend="Size">
+        <input type="radio" class="wide" name="sksizing" id="sizing-sketch"    title="Use scaled sketch units" data-text="Sketch: 1 mm / px" checked>
+        <input type="radio" name="sksizing" id="sizing-border"    title="Use sized border" data-text="Border: ? mm">
+      </span>
+    </span>
+    <span class="for-schedule for-seam">
+      <span class="group" data-legend="Query">
+        <input type="checkbox" id="show-node"  title="Highlight node"  data-text="n">
+        <input type="range" id="node-range" min="1" max="100">
+        <input type="checkbox" id="show-query" title="Visualize query" data-text="q">
+      </span>
+    </span>
+    <span class="for-layer">
+      <!-- global modifiers-->
+      <span class="group" data-legend="Gauge">
+        <input type="radio" name="gauge" class="left wide"
+          id="full-gauge" data-text="Full" title="Full gauge">
+        <input type="radio" name="gauge" class="right wide"
+          id="half-gauge" data-text="Half" title="Half gauge" checked>
+      </span>
+      <span class="group" data-legend="Subdiv">
+        <input type="radio" name="subdiv" class="left wide"
+          id="subdiv-1" data-text="1" title="No subdivision, using default stitches" checked>
+        <input type="radio" name="subdiv" class="middle wide"
+          id="subdiv-2" data-text="2" title="Subdivision by 2">
+        <input type="radio" name="subdiv" class="middle wide"
+          id="subdiv-4" data-text="4" title="Subdivision by 4">
+        <input type="radio" name="subdiv" class="right wide"
+          id="subdiv-8" data-text="8" title="Subdivision by 8">
+      </span>
+      <span class="group" data-legend="Layers">
+        <input type="radio" name="skaction" id="anchor-create"
+          title="Create a sketch anchor for stitch-level grids"
+          data-text="&#8857;"> <!-- 🞊 -->
+        <input type="radio" name="skaction" id="anchor-toggle"
+          title="Toggle the parameterization of an anchor"
+          data-text="&#8859;"> <!-- ⊛ -->
+        <input type="radio" name="skaction" id="rect-create"
+          title="Create a rectangular grid"
+          data-text="&#8865;"> <!-- ⊡ -->
+        <input type="checkbox" class="wide" id="layer-update"   title="Edit mode for fast stitch program feedback given layer changes"
+          data-text="L-Edit">
+        <input type="checkbox" class="wide" id="retrace" title="Retrace upon update"
+          data-text="RT">
+      </span>
+      <!-- per-layer modifiers
+      <span class="group" data-legend="Local">
+
+      </span>-->
+    </span>
+    <!-- hidden actions -->
+    <span style="display: none;">
+      <input type="radio" name="skaction" id="query-geodesic">
+    </span>
+    <!-- layers on canvas-->
+    <span id="canvasside">
+      <span class="group" id="dispLayer" data-legend="Display">
+        <span class="group" data-legend="General">
+          <input type="checkbox" id="showFlow"
+            data-text="Ti" title="Display time information"
+            checked></input>
+          <input type="checkbox" id="showStitches"
+            data-text="St" title="Display stitch graph"
+            checked></input>
+          <input type="checkbox" id="showColorFaces"
+            data-text="TF"  title="Use face-shading for the time visualization"
+            checked></input>
+          <input type="checkbox" id="showStitchFaces"
+            data-text="SF"  title="Use face-shading for the stitch programs"
+            checked></input>
+          <input type="checkbox" id="showIsolines"
+            data-text="Is" title="Display main interface isolines"
+            checked></input>
+          <input type="checkbox" id="showFullIsolines"
+            data-text="FI" title="Display complete isolines upon hover"
+            checked style="display: none;"></input>
+          <input type="checkbox" id="cacheHIT"
+            data-text="HI" title="Use double-buffered HIT canvas"
+            checked style="display: none;"></input>
+        </span>
+        <span class="group" data-legend="Features">
+          <input type="checkbox" id="showBG"
+            data-text="Bg" title="Show background color"
+            checked></input>
+          <input type="checkbox" id="showLabels"
+            data-text="Tx" title="Display sketch labels"
+            checked></input>
+          <input type="checkbox" id="showLinks"
+            data-text="Li" title="Display link characters"
+            checked></input>
+          <input type="checkbox" id="showLength"
+            data-text="&#8467;" title="Always show the length of edges"></input>
+          <input type="checkbox" id="showFlowConstraints"
+            data-text="tC" title="Display time constraints"
+            checked></input>
+          <input type="checkbox" id="showKappaConstraints"
+            data-text="&kappa;C" title="Display curvature constraints"
+            checked></input>
+          <input type="checkbox" id="showPCurves"
+            data-text="PC" title="Display PCurves"
+            checked></input>
+          <input type="checkbox" id="showSeams"
+            data-text="Se" title="Display seam annotations"
+            checked></input>
+          <input type="checkbox" id="showIrregular"
+            data-text="Ir" title="Highlight irregular stitches"
+            checked></input>
+          <input type="checkbox" id="showLayers"
+            data-text="La" title="Display layer annotations"
+            checked></input>
+          <input type="checkbox" id="previewLayers"
+            data-text="LP" title="Preview layer patterns"
+            checked></input>
+        </span>
+      </span>
+      <span class="group" id="renderLayer" data-legend="Render">
+        <span class="hlist">
+          <span class="hfill"></span>
+          <input type="radio" name="skdisplay" id="display-none"    title="Do not render anything">
+          <input type="radio" name="skdisplay" id="display-flow"    title="Display flow direction" data-text="uv">
+          <input type="radio" name="skdisplay" id="display-kappa" title="Display the user-defined curvature" data-text="&kappa;">
+          <input type="radio" name="skdisplay" id="display-time"    title="Display time function"  data-text="t">
+          <input type="radio" name="skdisplay" id="display-stress"  title="Display stress from flow neighborhood"  data-text="&sigma;">
+          <input type="radio" name="skdisplay" id="display-stretch" title="Display local time stretch" data-text="&tau;">
+          <input type="radio" name="skdisplay" id="display-geodesic" title="Display the geodesic distance to a point" data-text="g">
+          <input type="radio" name="skdisplay" id="display-region"  title="Display the isoline segmentation region" data-text="r" checked>
+        </span>
+      </span>
+      <!-- <span class="break"></span> -->
+      <span class="group" id="graphLayer" data-legend="Graph">
+        <input type="checkbox" id="inv_time"
+            title="Invert time function"
+            data-env="invertTime" data-text="inverse">
+        <!-- merging -->
+        <div class="slider">
+          <label for="iso_threshold">Min</label>
+          <span class="slider">
+            <input type="range" id="iso_threshold" class="region"
+                title="Threshold for region merging"
+                data-env="minRegionDT" value="0.25" min="0" max="2" step="0.05"
+                oninput="this.parentElement.nextElementSibling.innerHTML = parseFloat(this.value).toFixed(2);">
+          </span>
+          <span class="region-value">0.25</span>
+        </div>
+        <!-- uniform splitting -->
+        <input type="checkbox" id="split_uniform"
+            title="Use uniform region splitting"
+            data-env="uniformRegionSplit" data-text="u-split">
+        <!-- splitting -->
+        <div class="slider usplit">
+          <label for="split_threshold">Max</label>
+          <span class="slider">
+            <input type="range" id="split_threshold" class="region"
+              title="Threshold for region splitting"
+              data-env="maxRegionDT" value="10" min="1" max="10" step="0.1"
+              oninput="this.parentElement.nextElementSibling.innerHTML = parseFloat(this.value).toFixed(1);">
+          </span>
+          <span class="region-value">10.0</span>
+        </div>
+      </span>
+      <span class="group" id="stitchLayer" data-legend="Stitches">
+        <input type="checkbox" id="show-accuracy" title="Visualize wale and course accuracy" data-text="ac">
+        <input type="checkbox" id="show-trace" title="Visualize trace" data-text="tr">
+        <br>
+        <span class="hlist">
+          <span class="hfill"></span>
+          <input type="radio" name="stitchviz" id="show-none"    title="Do not render anything">
+          <input type="radio" name="stitchviz" id="show-program" title="Visualize program result" data-text="prog" checked>
+          <input type="radio" name="stitchviz" id="show-type"    title="Visualize stitch type" data-text="type">
+          <input type="radio" name="stitchviz" id="show-fyarn"   title="Visualize front yarn" data-text="fyarn">
+          <!-- <input type="radio" name="stitchviz" id="show-byarn"   title="Visualize back yarn" data-text="byarn"> -->
+        </span>
+        <span class="clear"></span>
+      </span>
+      <span class="group" id="computeLayer" data-legend="Compute">
+        <input type="checkbox" class="wide" id="flow-update" title="Update the time when the shape or constraints change"
+          data-text="Time">
+        <input type="checkbox" class="wide" id="schedule-update" title="Sample the program upon time change"
+          data-text="Program">
+      </span>
+    </span>
+  </span>
+  <!-- knitout toolbar -->
+  <span class="for-knitout">
+    <span class="group for-knitout" data-legend="Side">
+      <input type="radio" name="frontSide" class="wide left"  id="front" title="Show front side first" data-text="Front" checked>
+      <input type="radio" name="frontSide" class="wide right" id="back"  title="Show back side first"  data-text="Back">
+      <input type="checkbox" id="twosided" title="Show both sides" data-text="Both" checked>
+    </span>
+    <span class="group" data-legend="Rack">
+      <input type="radio" name="rack-mode" class="wide left"
+        id="rack-explicit" title="Show explicit racking and offsets beds."
+        data-text="Explicit">
+      <input type="radio" name="rack-mode" class="wide middle"
+        id="rack-semi" title="Do not show racking, but show transfers and implicit connections."
+        data-text="Semi">
+      <input type="radio" name="rack-mode" class="wide right"
+        id="rack-implicit" title="Do not show racking, or transfer, only show positive actions."
+        data-text="Implicit" checked>
+    </span>
+    <span class="group" data-legend="Yarn">
+      <input type="checkbox" id="carrierRange" data-text="Range" checked>
+    </span>
+    <span class="group" data-legend="LOD">
+      <select id="knitout-lod" value="-1">
+        <option value="-1" selected>Auto</option>
+        <option value="0">Coarse</option>
+        <option value="1">Medium</option>
+        <option value="2">Finest</option>
+      </select>
+    </span>
+  </span>
+
+  <!-- Settings -->
+  <include src="./settings.html"></include>
+</div>

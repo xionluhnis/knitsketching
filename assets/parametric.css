@@ -1,0 +1,155 @@
+/** Params Editor */
+#parametric-editor {
+  width: 300px;
+}
+#params {
+  list-style: none;
+  padding-left: 0;
+}
+#params li {
+  margin-bottom: 5px;
+  padding: 5px;
+  background: white;
+}
+#params li.top {
+  background: rgba(255, 255, 255, 0.5);
+  margin-bottom: 15px;
+}
+#params .top select {
+  background: transparent;
+  border: 3px solid white;
+  min-width: 140px;
+  /* text-align: center; */
+  color: gray;
+}
+#params fieldset {
+  background: rgba(255, 255, 255, 0.9);
+  page-break-inside: avoid;
+}
+#params legend {
+  text-transform: capitalize;
+}
+#params label {
+  min-width: 100px;
+  margin-left: 10px;
+  padding-right: 10px;
+  font-weight: bold;
+  display: inline-block;
+  /* text-transform: capitalize; */
+  cursor: pointer;
+  color: gray;
+  vertical-align: middle;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+#params div label {
+  margin-left: 25px;
+  margin-right: -15px;
+}
+#params li > div {
+  font-size: 0.9em;
+}
+#params hr {
+  border-top: 3px solid #eee;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+#params input,
+#params select {
+  max-width: 140px;
+  height: 32px;
+  padding: 0px 10px;
+  color: #333;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 1px 0;
+
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background: white;
+  border: 3px solid #eee;
+  border-radius: 5px;
+}
+#params input:disabled,
+#params select:disabled {
+  border: 3px solid #ccc !important;
+  background: #eee;
+  cursor: mouse;
+  pointer-events: none;
+}
+#params input[type=button] {
+  color: #66F;
+  min-width: 100px;
+}
+#params input[type=button]:focus {
+  border: 3px solid #66F;
+}
+#params input[type=button].invalid {
+  border: 3px solid #F66;
+  color: #F66;
+  text-decoration: underline wavy #F66 1px;
+}
+#params input[type=button].incomplete {
+  border-left: 3px solid #F66;
+}
+#params input[type=checkbox] {
+  min-width: 0;
+  width: auto;
+  margin: 0;
+  height: 32px;
+  width: 32px;
+}
+#params input[type=checkbox]:checked {
+  background: #FF6666;
+}
+#params input[disabled] {
+  border: none;
+}
+#params input[type=range] {
+  cursor: ew-resize;
+}
+input.shader,
+input.function,
+input.layout,
+input.pattern {
+  background: #d5edff url(gears.png) right 0 no-repeat;
+  background-size: contain;
+  border: none; /*1px solid silver;*/
+  text-align: left;
+}
+
+#params .child,
+#params .deg1,
+#params .deg2,
+#params .deg3,
+#params .deg3c,
+#params .bezier,
+#params .cr,
+#params li .normal,
+#params li .tangent,
+#params li .angle,
+#params li .ns,
+#params li .ts,
+#params.subcurve .no-subcurve {
+  display: none;
+}
+#params.child .child,
+#params.deg1 .deg1,
+#params.deg2 .deg2,
+#params.deg3 .deg3,
+#params.deg3.bezier .bezier,
+#params.deg3.cr .cr,
+#params.deg3 .normal .normal,
+#params.deg3 .tangent .tangent,
+#params.deg3 .angle .angle,
+#params.deg3.ns .ns,
+#params.deg3.ts .ts,
+#params.deg3.cr .deg3c,
+#params.deg3.ns .deg3c,
+#params.deg3.ts .deg3c {
+  display: block !important;
+}

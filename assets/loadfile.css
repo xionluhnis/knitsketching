@@ -1,0 +1,46 @@
+#loadfile .section {
+  color: gray;
+  font-weight: bold;
+  border-left: 3px solid #efefef;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+#loadfile .section:first-child::after {
+  display: block;
+  position: absolute;
+  right: 1em;
+  content: "<Esc> to close";
+  font-size: small;
+  color: silver;
+  font-weight: 100;
+  top: 1em;
+}
+#loadfile a::after {
+  /* content: attr(data-params); */
+  color: silver;
+  font-size: 65%;
+}
+#loadfile {
+  max-width: 80%;
+  max-height: 80%;
+}
+#loadfile a {
+  display: inline-block;
+  padding: 0 10px;
+  background: #efefef;
+  border-radius: 10px;
+  margin: 5px;
+}
+#loadfile a:hover {
+  background: #0091ff;
+  color: white;
+}
+#loadfile a.close {
+  float: right;
+}
+#loadfile a.close:hover {
+  background: gray;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}

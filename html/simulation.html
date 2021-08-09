@@ -1,0 +1,27 @@
+<div id="simulation-editor" class="panel closed">
+  <h2>Sketch Simulation</h2>
+  <div class="options">
+    <select id="mesh-index" value="1">
+      <option value="0">Mesh 0</option>
+      <option value="1">Mesh 1</option>
+      <option value="2">Mesh 2</option>
+    </select>
+    <i class="separator"></i>
+    <select id="mesh-level" value="1">
+      <option value="0">Level 0</option>
+      <option value="1">Level 1</option>
+      <option value="2">Level 2</option>
+    </select>
+    <select id="mesh-engine" style="display: none;">
+      <option value="d3">D3</option>
+      <option value="ngraph">NGraph</option>
+    </select>
+    <i class="separator"></i>
+    <a id="mesh-update" class="button">Update</a>
+    <div class="break"></div>
+    <label>Export</label>
+    <a id="mesh-export-rest" class="button" href="#export-rest">Rest</a>
+    <a id="mesh-export-full" class="button" href="#export-current">Current</a>
+  </div>
+  <div id="output-simulation"></div>
+</div>

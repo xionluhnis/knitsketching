@@ -1,0 +1,52 @@
+/** History panel */
+
+#history {
+  list-style: none;
+  padding: 0;
+  counter-reset: history-counter;
+}
+
+#history li {
+  background: #FFF9F9;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+  color: gray;
+  cursor: pointer;
+  counter-increment: history-counter;
+}
+#history li::before {
+  content: '(' counter(history-counter) ')';
+  padding-right: 10px;
+}
+#history li:hover {
+  background: #F66;
+  color: white;
+}
+#history li.current {
+  background: white;
+  color: black;
+  cursor: default;
+}
+#history .label {
+  margin-right: 10px;
+}
+#history .time {
+  float: right;
+  color: gray;
+  padding-left: 10px;
+}
+#history .summary {
+  color: #80a3ef;
+  font-style: italic;
+}
+#history .summary::before {
+  content: '(';
+}
+#history .summary::after {
+  content: ')';
+}
+#load_history,
+#save_history {
+  width: auto;
+  padding: 10px;
+}

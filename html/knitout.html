@@ -1,0 +1,34 @@
+<div id="knitout-editor" class="panel closed">
+  <h2>Knitout Editor</h2>
+  <div class="options">
+    <label for="knitout_target">Target</label>
+    <select id="knitout_target">
+      <option value="">Sketch</option>
+    </select>
+    <a class="button" id="load_knitout">Load</a>
+    <a class="button" id="save_knitout">Save</a>
+    <input type="file" id="file_knitout" accept=".k">
+  </div>
+  <textarea id="knitout" class="texteditor" placeholder="Write your knitout code here"
+            rows="20">;!knitout-2
+;;Carriers: 1 2 3 4 5 6 7 8 9 10
+
+;Node
+knit + f0 1
+knit + f2 1
+knit - f1 1
+knit + f0 1 ; $meta=0
+knit + f1 1 ; $meta=2
+  </textarea>
+  <div class="info" id="knitout_info"></div>
+
+  <h2>Documentation</h2>
+  <p>
+  See the <a href="https://textiles-lab.github.io/knitout/knitout.html">specification</a>.
+  </p>
+  <p>
+  Operations:
+  </p>
+  <ul id="knitout_docu" class="docu">
+  </ul>
+</div>

@@ -1,0 +1,130 @@
+<div id="parametric-editor" class="panel closed">
+  <h2>Parameteric Curve</h2>
+  <ul id="params" class="deg3 cr">
+    <li class="top">
+      <label for="curve-target">Curve</label>
+      <select id="curve-target" value="-1">
+        <option value="-1">-- new --</option>
+      </select>
+    </li>
+    <li>
+      <label for="curve-parent">Parent</label>
+      <input id="curve-parent" type="button" value="" placeholder="Sketch parent">
+    </li>
+    <li class="deg1">
+      <label for="curve-subcurve">SubCurve</label>
+      <input id="curve-subcurve" data-name="subCurve" type="checkbox" placeholder="Sketch parent">
+    </li>
+    <li class="child">
+      <label for="curve-constraint">Constraint</label>
+      <input id="curve-constraint" type="checkbox" title="Whether to associate a constraint with the curve">
+    </li>
+    <li class="seam">
+      <label for="curve-seam">Seam</label>
+      <select id="curve-seam" value="auto" data-name="seamMode">
+        <option value="-1">Off</option>
+        <option value="0">Auto</option>
+        <option value="1">On</option>
+      </select>
+    </li>
+    <li class="no-subcurve">
+      <label for="curve-degree">Degree</label>
+      <input id="curve-degree" type="number" min="1" max="3" step="1" value="3">
+    </li>
+    <li class="deg3">
+      <label for="curve-type">Type</label>
+      <select id="curve-type" value="ss" data-name="cubicType">
+        <option value="ss">Simple Spline</option>
+        <option value="cr">Catmull-Rom</option>
+        <option value="ts">Tangent Spline</option>
+        <option value="ns">Normal Spline</option>
+      </select>
+    </li>
+    <li class="cr">
+      <label for="curve-alpha">CR &alpha;</label>
+      <input id="curve-alpha" data-name="crAlpha" type="range" min="0" max="1" value="0.5" step="0.01">
+      <label for="curve-full">Full</label>
+      <input id="curve-full" data-name="crFull" type="checkbox" checked>
+    </li>
+    <li>
+      <label for="sample-s">Sample S</label>
+      <input id="sample-s" type="button" value="" placeholder="Sample">
+      <div class="deg3">
+        <label for="curve-start-ctrl">Control</label>
+        <select id="curve-start-ctrl" data-name="startCtrl" value="linear">
+          <option value="linear">Linear</option>
+          <option value="normal">Normal</option>
+          <option value="tangent">Tangent</option>
+          <option value="angle">Angle</option>
+        </select>
+        <label for="curve-start-weight">Weight</label>
+        <input id="curve-start-weight" data-name="startWeight"
+                type="range" min="0" max="1" value="0.333" step="0.01">
+        <div class="angle">
+          <label for="curve-start-sine">Angle</label>
+          <input id="curve-start-sine" data-name="startSine" type="range"
+                  min="-1" value="0" max="1" step="0.01">
+        </div>
+        <div class="normal tangent angle">
+          <label for="curve-start-inv">Invert</label>
+          <input id="curve-start-inv" data-name="startInvert" type="checkbox">
+        </div>
+      </div>
+    </li>
+    <li class="deg2 deg3c">
+      <label for="sample-c0">Sample C0</label>
+      <input id="sample-c0" type="button" value="" placeholder="Sample">
+      <div class="ns ts">
+        <label for="curve-first-weight">Weight</label>
+        <input id="curve-first-weight" data-name="firstWeight"
+                type="range" min="0" max="1" value="0.333" step="0.01">
+        <label for="curve-first-inv">Invert</label>
+        <input id="curve-first-inv" data-name="firstInvert" type="checkbox">
+      </div>
+    </li>
+    <li class="deg3c">
+      <label for="sample-c1">Sample C1</label>
+      <input id="sample-c1" type="button" value="" placeholder="Sample">
+      <div class="ns ts">
+        <label for="curve-second-weight">Weight</label>
+        <input id="curve-second-weight" data-name="secondWeight"
+                type="range" min="0" max="1" value="0.333" step="0.01">
+        <label for="curve-second-inv">Invert</label>
+        <input id="curve-second-inv" data-name="secondInvert" type="checkbox">
+      </div>
+    </li>
+    <li>
+      <label for="sample-e">Sample E</label>
+      <input id="sample-e" type="button" value="" placeholder="Sample">
+      <div class="deg3">
+        <label for="curve-end-ctrl">Control</label>
+        <select id="curve-end-ctrl" data-name="endCtrl" value="linear">
+          <option value="linear">Linear</option>
+          <option value="normal">Normal</option>
+          <option value="tangent">Tangent</option>
+          <option value="angle">Angle</option>
+        </select>
+        <label for="curve-end-weight">Weight</label>
+        <input id="curve-end-weight" data-name="endWeight"
+                type="range" min="0" max="1" value="0.333" step="0.01">
+        <div class="angle">
+          <label for="curve-end-sine">Angle</label>
+          <input id="curve-end-sine" data-name="endSine" type="range"
+                  min="-1" value="0" max="1" step="0.01">
+        </div>
+        <div class="normal tangent angle">
+          <label for="curve-end-inv">Invert</label>
+          <input id="curve-end-inv" data-name="endInvert" type="checkbox">
+        </div>
+      </div>
+    </li>
+    <li class="deg2 bezier">
+      <label for="curve-t">T value</label>
+      <input id="curve-t" data-name="tval" type="range" min="0" max="1" value="0.5" step="0.01">
+    </li>
+    <li class="bezier">
+      <label for="curve-d1">D<sub>1</sub> value</label>
+      <input id="curve-d1" data-name="d1" type="range" min="0" max="100" value="0" step="1">
+    </li>
+  </ul>
+</div>

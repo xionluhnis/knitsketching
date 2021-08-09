@@ -1,0 +1,92 @@
+/** Main style */
+
+@import url('base.css');
+@import url('panel.css');
+@import url('sidebar.css');
+@import url('editor.css');
+@import url('parametric.css');
+@import url('output.css');
+@import url('toolbar.css');
+@import url('toolbar-canvas.css');
+@import url('toolbar-shape.css');
+@import url('toolbar-pattern.css');
+@import url('toolbar-sketch.css');
+@import url('toolbar-schedule.css');
+@import url('settings.css');
+@import url('tooltip.css');
+@import url('function.css');
+@import url('layout.css');
+@import url('pattern.css');
+@import url('contextmenu.css');
+@import url('history.css');
+@import url('loadfile.css');
+
+/* Float layout */
+#editor textarea {
+  width: 100%;
+  resize: vertical;
+  tab-size: 2;
+  -moz-tab-size: 2;
+  padding: 10px;
+  font-family: monospace;
+}
+
+/* general css */
+
+#shaper_output {
+  width: 600px;
+  height: 200px;
+}
+
+/* options */
+.options {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px groove threedface;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.options .break {
+  flex-basis: 100%;
+}
+.options label {
+  cursor: pointer;
+  padding: 0 5px;
+  min-width: 50px;
+}
+.options hr {
+  width: 100%;
+  border: 1px solid silver;
+}
+.options select {
+  min-width: 50px;
+  appearance: none;
+  -webkit-appearance: none;
+  margin-right: 5px;
+  padding: 2px 5px;
+  background: white;
+  border: 1px solid silver;
+  border-radius: 5px;
+}
+.options select, .options option {
+  font-size: 1em;
+}
+.options input[type=number] {
+  max-width: 50px;
+  padding-left: 5px;
+}
+.options span.button,
+.options a {
+  margin-left: 10px;
+  padding: 0 10px;
+  user-select: none;
+}
+.options .separator {
+  border-left: 1px solid silver;
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin: 0 5px;
+}

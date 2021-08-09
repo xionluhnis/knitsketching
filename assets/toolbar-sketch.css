@@ -1,0 +1,144 @@
+/** Toolbar / Sketch mode */
+
+/* Action button */
+#curve-select               { background-image: url(icons/sketch_select.png); }
+#curve-select:checked       { background-image: url(icons/white_sketch_select.png); }
+#curve-create               { background-image: url(icons/sketch_create.png); }
+#curve-create:checked       { background-image: url(icons/white_sketch_create.png); }
+#curve-edit                 { background-image: url(icons/sketch_edit.png); }
+#curve-edit:checked         { background-image: url(icons/white_sketch_edit.png); }
+#curve-move                 { background-image: url(icons/move2.png); }
+#curve-move:checked         { background-image: url(icons/white_move2.png); }
+#curve-scale                { background-image: url(icons/scale.png); }
+#curve-scale:checked        { background-image: url(icons/white_scale.png); }
+#segment-divide             { background-image: url(icons/segment_divide.png); }
+#segment-divide:checked     { background-image: url(icons/white_segment_divide.png); }
+#segment-line               { background-image: url(icons/segment_line.png); }
+#segment-line:checked       { background-image: url(icons/white_segment_line.png); }
+#segment-quad               { background-image: url(icons/segment_quad.png); }
+#segment-quad:checked       { background-image: url(icons/white_segment_quad.png); }
+#segment-cubic              { background-image: url(icons/segment_cubic.png); }
+#segment-cubic:checked      { background-image: url(icons/white_segment_cubic.png); }
+#segment-link               { background-image: url(icons/segment_link.png); }
+#segment-link:checked       { background-image: url(icons/white_segment_link.png); }
+#segment-unlink             { background-image: url(icons/segment_unlink.png); }
+#segment-unlink:checked     { background-image: url(icons/white_segment_unlink.png); }
+#node-delete                { background-image: url(icons/node_delete.png); }
+#node-delete:checked        { background-image: url(icons/white_node_delete.png); }
+#node-corner                { background-image: url(icons/node_corner.png); }
+#node-corner:checked        { background-image: url(icons/white_node_corner.png); }
+#node-smooth                { background-image: url(icons/node_smooth.png); }
+#node-smooth:checked        { background-image: url(icons/white_node_smooth.png); }
+#node-symmetric             { background-image: url(icons/node_symmetric.png); }
+#node-symmetric:checked     { background-image: url(icons/white_node_symmetric.png); }
+#node-auto                  { background-image: url(icons/node_s.png); }
+#node-auto:checked          { background-image: url(icons/white_node_s.png); }
+#node-cr                    { background-image: url(icons/node_cr.png); }
+#node-cr:checked            { background-image: url(icons/white_node_cr.png); }
+#align-horizontal           { background-image: url(icons/align_horizontal.png); }
+#align-horizontal:checked   { background-image: url(icons/white_align_horizontal.png); }
+#distr-horizontal           { background-image: url(icons/distr_horizontal.png); }
+#distr-horizontal:checked   { background-image: url(icons/white_distr_horizontal.png); }
+#align-vertical             { background-image: url(icons/align_vertical.png); }
+#align-vertical:checked     { background-image: url(icons/white_align_vertical.png); }
+#distr-vertical             { background-image: url(icons/distr_vertical.png); }
+#distr-vertical:checked     { background-image: url(icons/white_distr_vertical.png); }
+#flow-create                { background-image: url(icons/flow_create.png); }
+#flow-create:checked        { background-image: url(icons/white_flow_create.png); }
+#flow-parametric            { background-image: url(icons/flow_parametric.png); }
+#flow-parametric:checked    { background-image: url(icons/white_flow_parametric.png); }
+#flow-set                   { background-image: url(icons/flow_type.png); }
+#flow-set:checked           { background-image: url(icons/white_flow_type.png); }
+#flow-direction             { background-image: url(icons/flow_direction.png); }
+#flow-direction:checked     { background-image: url(icons/white_flow_direction.png); }
+#flow-isoline               { background-image: url(icons/flow_isoline.png); }
+#flow-isoline:checked       { background-image: url(icons/white_flow_isoline.png); }
+#flow-seam                  { background-image: url(icons/flow_seam.png); }
+#flow-seam:checked          { background-image: url(icons/white_flow_seam.png); }
+#flow-source                { background-image: url(icons/flow_source.png); }
+#flow-source:checked        { background-image: url(icons/white_flow_source.png); }
+#flow-sink                  { background-image: url(icons/flow_sink.png); }
+#flow-sink:checked          { background-image: url(icons/white_flow_sink.png); }
+#kappa-create               { background-image: url(icons/kappa_create.png); }
+#kappa-create:checked       { background-image: url(icons/white_kappa_create.png); }
+#kappa-move                 { background-image: url(icons/kappa_move.png); }
+#kappa-move:checked         { background-image: url(icons/white_kappa_move.png); }
+#kappa-set-value            { background-image: url(icons/kappa_set_value.png); }
+#kappa-set-value:checked    { background-image: url(icons/white_kappa_set_value.png); }
+#kappa-set-alpha            { background-image: url(icons/kappa_set_alpha.png); }
+#kappa-set-alpha:checked    { background-image: url(icons/white_kappa_set_alpha.png); }
+#kappa-delete               { background-image: url(icons/kappa_delete.png); }
+#kappa-delete:checked       { background-image: url(icons/white_kappa_delete.png); }
+#seam-create                { background-image: url(icons/seam_create.png); }
+#seam-create:checked        { background-image: url(icons/white_seam_create.png); }
+#seam-toggle                { background-image: url(icons/seam_toggle.png); }
+#seam-toggle:checked        { background-image: url(icons/white_seam_toggle.png); }
+#symmetry                   { background-image: url(icons/symmetry.png); }
+#symmetry:checked           { background-image: url(icons/white_symmetry.png); }
+#symmetry-x                 { background-image: url(icons/symmetry_x.png); }
+#symmetry-x:checked         { background-image: url(icons/white_symmetry_x.png); }
+#symmetry-y                 { background-image: url(icons/symmetry_y.png); }
+#symmetry-y:checked         { background-image: url(icons/white_symmetry_y.png); }
+
+#constraint-type {
+  /* position: relative; */
+  width: 32px;
+  min-width: 32px;
+  display: inline-block;
+  vertical-align: top;
+  --input-height: calc(32px + 5px);
+}
+#constraint-type:hover::after {
+  display: block;
+  width: 44px;
+  height: calc(5 * var(--input-height) + 2 * 5px);
+  background: rgba(255, 255, 255, 0.7);
+  content: '';
+  position: absolute;
+  z-index: 3;
+  margin-top: -5px;
+  margin-left: -5px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+}
+
+#constraint-type input {
+  display: none;
+}
+#constraint-type input:first-child,
+#constraint-type input:checked {
+  display: inline-block;
+  position: absolute;
+  z-index: 9;
+}
+#constraint-type:hover input {
+  display: flex;
+  flex-direction: column;
+  position: absolute !important;
+  margin-top: 0 !important;
+  z-index: 9;
+}
+#constraint-type:hover #flow-isoline {
+  top: calc(1 * var(--input-height));
+}
+#constraint-type:hover #flow-seam {
+  top: calc(2 * var(--input-height));
+}
+#constraint-type:hover #flow-source {
+  top: calc(3 * var(--input-height));
+}
+#constraint-type:hover #flow-sink {
+  top: calc(4 * var(--input-height));
+}
+
+.toolbar #node-cr ~ input[data-alpha],
+.toolbar #node-cr + .separator {
+  display: none;
+}
+.toolbar #node-cr:checked ~ input[data-alpha],
+.toolbar #node-cr:checked + .separator {
+  display: inline-block;
+}
+.group label {
+  margin-right: 3px;
+}

@@ -1,0 +1,27 @@
+/** Toolbar / Shape Mode */
+#shape-select           { background-image: url(icons/select.png); }
+#shape-select:checked   { background-image: url(icons/white_select.png); }
+#shape-length           { background-image: url(icons/length.png); }
+#shape-length:checked   { background-image: url(icons/white_length.png); }
+#shape-width            { background-image: url(icons/width.png); }
+#shape-width:checked    { background-image: url(icons/white_width.png); }
+#shape-width2           { background-image: url(icons/width2.png); }
+#shape-width2:checked   { background-image: url(icons/white_width2.png); }
+#shape-width3           { background-image: url(icons/width3.png); }
+#shape-width3:checked   { background-image: url(icons/white_width3.png); }
+#shape-layout-auto            { background-image: url(icons/layout_auto.png); }
+#shape-layout-auto:checked    { background-image: url(icons/white_layout_auto.png); }
+#shape-layout-manual          { background-image: url(icons/layout_manual.png); }
+#shape-layout-manual:checked  { background-image: url(icons/white_layout_manual.png); }
+#shape-align-left           { background-image: url(icons/left.png); }
+#shape-align-left:checked   { background-image: url(icons/white_left.png); }
+#shape-align-center         { background-image: url(icons/center.png); }
+#shape-align-center:checked { background-image: url(icons/white_center.png); }
+#shape-align-right          { background-image: url(icons/right.png); }
+#shape-align-right:checked  { background-image: url(icons/white_right.png); }
+#shape-seam-center          { background-image: url(icons/seam_center.png); }
+#shape-seam-center:checked  { background-image: url(icons/white_seam_center.png); }
+#shape-seam-sides           { background-image: url(icons/seam_sides.png); }
+#shape-seam-sides:checked   { background-image: url(icons/white_seam_sides.png); }
+#shape-draw-seams           { background-image: url(icons/seam_freehand.png); }
+#shape-draw-seams:checked   { background-image: url(icons/white_seam_freehand.png); }

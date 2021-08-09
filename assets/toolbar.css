@@ -1,0 +1,372 @@
+/** Toolbar */
+#toolbar {
+  max-width: calc(100% - 68px);
+  min-height: 60px;
+}
+#toolbar i.separator::before {
+  content: '>';
+  color: #ccc;
+  font-weight: bold;
+}
+#toolbar .split {
+  display: inline-block;
+  width: 0px;
+  height: 32px;
+  border-left: 1px solid #ccc;
+}
+.toolbar input,
+.toolbar select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #fff;
+  border: 3px solid #eee;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+.toolbar select {
+  padding: 0 10px;
+}
+.toolbar input:focus,
+.toolbar select:focus {
+  outline: none;
+  box-shadow: 0 0 3pt 2pt #cccccc44;
+}
+.toolbar .group,
+.toolbar select {
+  margin-bottom: 20px;
+}
+.toolbar .group {
+  position: relative;
+  display: inline-block;
+  margin-left: 15px;
+  margin-right: 15px;
+  padding-left: 15px;
+  box-sizing: border-box;
+}
+.toolbar .group.empty {
+  margin-left: 0;
+  margin-right: 5px;
+  padding-left: 5px;
+}
+.toolbar .group::before {
+  content: attr(data-legend);
+  position: absolute;
+  display: inline-block;
+  color: #ddd;
+  pointer-events: none;
+  /*
+  border-left: 3px solid #ddd;
+  margin-left: -18px;
+  padding-left: 10px;
+  margin-top: -20px;
+  height: 50px;
+  */
+  writing-mode: tb;
+  transform: rotate(180deg);
+  left: -8px;
+  border-right: 2px solid silver;
+  width: auto;
+}
+.toolbar #sketch-mode,
+.toolbar #undo,
+.toolbar #redo,
+.toolbar .group {
+  vertical-align: middle;
+  min-height: 32px;
+}
+#undo,
+#redo {
+  display: inline-block;
+  height: 32px;
+}
+.toolbar input[type=button],
+.toolbar input[type=radio] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin: 0 1px;
+  /* border: 1px solid #eee; */
+  vertical-align: middle;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+}
+.toolbar input[type=checkbox][data-text] {
+  height: 32px;
+  font-size: 95%;
+  margin-top: -3px;
+  padding-top: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.toolbar input[data-text].wide {
+  width: auto;
+  padding: 0 10px;
+}
+.toolbar input.left {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0;
+  margin-right: -3px;
+}
+.toolbar input.middle {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+.toolbar input.right {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 0;
+  margin-left: -3px;
+}
+
+#toolbar .for-dat select,
+#toolbar .for-shape select,
+#toolbar .for-sketch select,
+#toolbar .for-simulation select,
+#toolbar .for-mesh select,
+#output_type, #sideMode, #edit_mode, #sketch_mode {
+  line-height: 38px;
+  min-height: 48px;
+}
+/* .toolbar select[data-label]::before {
+  content: attr(data-label) ":";
+  display: inline-block;
+} */
+.toolbar input[type=checkbox] {
+  min-width: 32px;
+  min-height: 32px;
+  /* vertical-align: middle; */
+}
+.toolbar input[disabled] {
+  pointer-events: none;
+}
+.toolbar input[type=button]:hover,
+.toolbar input[type=radio]:checked,
+.toolbar input[type=checkbox]:checked {
+  background-color: #F66;
+  color: white;
+}
+.toolbar input[type=checkbox].wide,
+.toolbar input[name=sksizing] {
+  padding: 0 10px;
+}
+.toolbar input[data-text]::before {
+  content: attr(data-text);
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  line-height: 26px;
+}
+.toolbar input[type=checkbox][data-text]::before {
+  line-height: 22px;
+}
+.toolbar input[data-text].wide::before {
+  width: auto;
+  line-height: 26px;
+}
+/*.toolbar input[type=checkbox].wide::before {
+  margin-top: -2px; /* shifted because of browser implementation
+} */
+.toolbar input[name=sksizing] {
+  width: auto !important;
+}
+.toolbar input[name=sksizing]::before {
+  line-height: 26px;
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+.toolbar input[type=checkbox].wide,
+.toolbar input[name=sksizing],
+.toolbar #show-trace {
+  height: 32px !important;
+  max-height: 32px !important;
+  min-height: 32px !important;
+  width: auto;
+  min-width: 32px;
+  max-width: 1000px;
+  margin: 0 !important;
+}
+.toolbar input[type=checkbox].wide::before,
+.toolbar input[name=sksizing]::before {
+  max-width: 200px;
+}
+.for-sketch,
+.for-simulation,
+.for-knitout,
+.for-dat,
+.for-mesh,
+.toolbar .for-sketch,
+.toolbar .for-layout,
+.toolbar .for-shape,
+.toolbar .for-linking,
+.toolbar .for-flow,
+.toolbar .for-kappa,
+.toolbar .for-seam,
+.toolbar .for-pattern,
+.toolbar .for-schedule,
+.toolbar .for-sampling,
+.toolbar .for-layer,
+.toolbar .for-edit {
+  display: none;
+}
+.sketch .for-sketch,
+.simulation .for-simulation,
+.knitout .for-knitout,
+.dat .for-dat,
+.mesh .for-mesh,
+.layout .for-layout,
+.shape .for-shape,
+.linking .for-linking,
+.flow .for-flow,
+.kappa .for-kappa,
+.seam .for-seam,
+.schedule .for-schedule,
+.sampling .for-sampling,
+.layer .for-layer,
+.pattern .for-pattern,
+.edit .for-edit {
+  display: flex;
+  vertical-align: middle;
+  flex-wrap: wrap;
+}
+/* .edit .shape .for-edit, */
+.edit .linking .for-edit,
+.edit .flow .for-edit,
+.edit .kappa .for-edit,
+.edit .schedule .for-edit,
+.edit .seam .for-edit,
+.edit .layer .for-edit {
+  opacity: 0.5;
+  max-width: 240px !important;
+  display: inline-block !important;
+  scrollbar-width: none;
+  overflow-x: auto;
+  max-height: 32px;
+}
+.edit .linking .for-edit.for-edit-smaller,
+.edit .flow .for-edit.for-edit-smaller,
+.edit .kappa .for-edit.for-edit-smaller,
+.edit .schedule .for-edit.for-edit-smaller,
+.edit .seam .for-edit.for-edit-smaller,
+.edit .layer .for-edit.for-edit-smaller {
+  max-width: 200px !important;
+}
+.edit .for-edit {
+  vertical-align: middle;
+  scroll-snap-type: y mandatory;
+  scroll-snap-stop: always;
+}
+.edit .for-edit .group {
+  scroll-snap-align: start;
+}
+.edit .for-edit::-webkit-scrollbar {
+  display: none;
+}
+.edit .for-edit:hover,
+.shape .for-edit {
+  opacity: 1.0;
+}
+.toolbar input {
+  opacity: 0.7;
+}
+.toolbar input {
+  background-size: 100%;
+}
+.toolbar input:hover,
+.toolbar input:checked {
+  opacity: 1.0;
+}
+#instructions {
+  width: calc(100% - 500px);
+  height: 23px;
+  overflow: hidden;
+}
+.for-knitout input[type=checkbox] {
+  display: inline-flex;
+}
+.for-knitout input[type=checkbox]::before {
+  align-self: center;
+}
+
+/** Simulation UI */
+.toolbar .for-simulation a.button {
+  width: auto;
+  padding: 10px;
+}
+
+/** DAT UI */
+.toolbar .for-dat [data-text] {
+  padding: 0 10px;
+}
+.toolbar .for-dat [data-text]::before {
+  content: attr(data-text);
+  display: inline-block;
+  max-width: 70px;
+  text-align: center;
+}
+
+/* Mode select */
+#sketch-mode {
+  min-width: 120px;
+  margin-right: 20px;
+}
+#sketch-mode .select {
+  position: absolute;
+  background: white;
+  z-index: 10;
+}
+#sketch-mode .select input {
+  width: auto;
+  padding: 0 10px;
+  display: none;
+  width: 120px;
+}
+#sketch-mode .select:hover input,
+#sketch-mode .select input:checked {
+  display: block;
+  position: relative;
+  width: 120px;
+}
+
+/* Range value tooltip */
+.toolbar .range {
+  display: inline-block;
+  position: relative;
+}
+.toolbar .range input[type=range] {
+  vertical-align: middle;
+}
+.toolbar input[type=range] +  .range-value {
+  display: none;
+}
+.toolbar input[type=range]:hover + .range-value {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  margin-top: 10px;
+  margin-left: 25px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 5px;
+  box-shadow: 0px 2px 5px #00000022;
+} 
+.toolbar span.range-value::before {
+  content: '';
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent;
+  border-bottom-color: #ddd;
+  margin-top: -15px;
+  position: absolute;
+  margin-left: 5px;
+}

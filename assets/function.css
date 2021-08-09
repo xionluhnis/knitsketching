@@ -1,0 +1,23 @@
+/** Function */
+#function-editor canvas {
+  background: rgba(255, 255, 255, 0.7);
+}
+a#function-create,
+a#function-delete {
+  margin: 0 5px;
+  font-weight: bold;
+  padding: 0 5px;
+  color: white;
+  width: 1em;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+a#function-create {
+  background: #009933;
+  cursor: cell;
+}
+a#function-delete {
+  background: #FF4444;
+  cursor: crosshair;
+}

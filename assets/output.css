@@ -1,0 +1,168 @@
+/** Output */
+
+#output {
+  position: absolute;
+  left: 70px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  flex-flow: column;
+}
+#output-layout {
+  position: relative;
+}
+#output canvas {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 1;
+}
+#output canvas + canvas {
+  z-index: 2;
+}
+#output canvas + canvas + canvas {
+  pointer-events: none;
+}
+#output canvas.hidden {
+  display: none;
+}
+
+#toolbar, #output .options {
+  flex: 0 1 auto;
+}
+#output .options {
+  margin-bottom: 10px;
+}
+#output *[id^=output] {
+  flex: 1 1 auto;
+}
+
+/* @see http://phrogz.net/tmp/canvas_image_zoom.html */
+#output-dat {
+  image-rendering:optimizeSpeed;             /* Legal fallback */
+  image-rendering:-moz-crisp-edges;          /* Firefox        */
+  image-rendering:-o-crisp-edges;            /* Opera          */
+  image-rendering:-webkit-optimize-contrast; /* Safari         */
+  image-rendering:optimize-contrast;         /* CSS3 Proposed  */
+  image-rendering:crisp-edges;               /* CSS4 Proposed  */
+  image-rendering:pixelated;                 /* CSS4 Proposed  */
+  -ms-interpolation-mode:nearest-neighbor;   /* IE8+           */
+  cursor: pointer;
+  margin-bottom: 10px;
+  flex: 1 1 auto;
+}
+#output-sketch,
+#output-knitout,
+#output-yarn {
+  display: none;
+  background: white;
+  margin-bottom: 10px;
+  flex: 1 1 auto;
+}
+.sketch #output-sketch,
+.yarn #output-yarn,
+.knitout #output-knitout {
+  display: block;
+  position: relative;
+}
+.yarn #output-yarn {
+  background: #FAD4D5;
+  padding: 20px;
+}
+#simulation-editor {
+  max-width: 50%;
+  overflow-y: hidden;
+}
+#output-simulation {
+  position: relative;
+  height: calc(100% - 200px);
+}
+#output-simulation canvas {
+  background: #FF666622;
+}
+#mesh-update {
+  margin: 0 5px;
+}
+
+/** Text UI */
+#textui {
+  position: relative;
+  z-index: 3;
+}
+#output-text-state,
+#output-user-state {
+  display: block;
+  height: 10px;
+  width: 240px;
+  appearance: none;
+  background: #f6f6f6;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+}
+#output-text-state:checked,
+#output-user-state:checked {
+  background: #FAFAFA;
+}
+#output-text-state:hover,
+#output-user-state:hover {
+  background: #EEE;
+}
+#output-text-state {
+  position: absolute;
+  top: -10px;
+}
+#output-text {
+  display: none;
+  position: absolute;
+  top: 0;
+  padding: 10px;
+  width: 220px;
+  background: #FFFFFF66;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#output-text:empty::before {
+  display: block;
+  content: 'No error';
+  color: #090;
+}
+#output-text .entry {
+  display: flex;
+}
+#output-text .message {
+  max-width: 180px;
+  overflow-x: hidden;
+}
+#output-text .error {
+  color: #A30;
+}
+#output-text .warning {
+  color: #960;
+}
+#output-text-state:checked + #output-text {
+  display: block;
+}
+#output-user-state {
+  position: fixed;
+  bottom: 10px;
+}
+#output-user {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  padding: 10px;
+  pointer-events: none;
+  white-space: pre;
+  tab-size: 4;
+  background: #FFFFFFAA;
+}
+#output-user-state:checked + #output-user {
+  display: flex;
+  flex-flow: column-reverse;
+}

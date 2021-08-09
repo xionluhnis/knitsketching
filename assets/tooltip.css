@@ -1,0 +1,24 @@
+
+/* tooltip */
+.tooltip {
+  position: fixed;
+  z-index: 10;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 0 5px #fcc;
+  /* border: 3px solid #eee; */
+}
+.tooltip.hidden {
+  display: none;
+}
+.tooltip.warning,
+.tooltip .warning {
+  background: red;
+  color: white;
+  font-weight: bold;
+}
+.tooltip span + span {
+  margin-left: 5px;
+  border-left: 2px solid silver;
+  padding-left: 5px;
+}

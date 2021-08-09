@@ -1,0 +1,121 @@
+<div id="pattern-editor" class="panel closed">
+  <h2>Pattern Editor</h2>
+  <div class="options">
+    <!-- file actions -->
+    <span class="group">
+      <a class="button" id="pattern-load">Load</a>
+      <span class="button dropdown">Save
+        <a class="button" id="pattern-save-png">.png</a>
+        <a class="button" id="pattern-save-txt">.txt</a>
+      </span>
+      <input type="file" id="pattern-file" accept=".pat,.txt,.jpg,.png">
+    </span>
+    <!-- size actions -->
+    <span class="group expand">
+      <label for="pattern-width">W</label>
+      <input type="number" id="pattern-width"
+        min="1" max="9999" step="1" value="1">
+      <label for="pattern-height">H</label>
+      <input type="number" id="pattern-height"
+        min="1" max="9999" step="1" value="1">
+      <input type="checkbox" id="pattern-scaling"
+        data-text="Fix ratio">
+    </span>
+    <!-- image actions -->
+    <span class="group">
+      <a class="button" id="pattern-rotate">+90&deg;</a>
+      <a class="button" id="pattern-rotate2">-90&deg;</a>
+      <a class="button" id="pattern-hflip">H-Flip</a>
+      <a class="button" id="pattern-vflip">V-Flip</a>
+    </span>
+    <input type="checkbox" id="pattern-tile" data-text="Tile">
+  </div>
+  <div class="options">
+    <input type="radio" id="brush-none" name="pattern-brush" class="brush" checked>
+    <!-- disk -->
+    <input type="radio" name="pattern-brush" class="brush"
+      data-func="geom.distBetween(p, q, 'l22') <= R*R"
+      data-text="⏺">
+    <!-- diamond-->
+    <input type="radio" name="pattern-brush" class="brush"
+      data-func="geom.distBetween(p, q, 'l1') <= R"
+      data-text="◆">
+    <!-- square -->
+    <input type="radio" name="pattern-brush" class="brush"
+      data-func="Math.abs(p.x - q.x) <= R && Math.abs(p.y - q.y) <= R"
+      data-text="■">
+    <!-- lines -->
+    <input type="radio" name="pattern-brush" class="brush"
+      data-func="Math.abs(p.x - q.x) <= R && Math.abs(p.y - q.y) <= 0.5"
+      data-text="‒">
+    <input type="radio" name="pattern-brush" class="brush"
+      data-func="Math.abs(p.y - q.y) <= R && Math.abs(p.x - q.x) <= 0.5"
+      data-text="|">
+    <!-- brush size -->
+    <input type="range" id="brush-size" min="1" max="100" value="10"
+    oninput="this.nextElementSibling.innerHTML = 'R=' + parseInt(this.value);">
+    <span class="range-value">R=10</span>
+  </div>
+  <canvas id="pattern"></canvas>
+  <h3>Mapping</h3>
+  <template id="mapping-item">
+    <li class="mapping-item">
+      <input class="key" type="radio" name="pattern-mapping" data-text="0">
+      <span class="value">
+        <select value="">
+          <option value="">-</option>
+          <option value="K">K</option>
+          <option value="P">P</option>
+          <option value="L">L</option>
+          <option value="R">R</option>
+          <option value="T">T</option>
+          <option value="M">M</option>
+        </select>
+      </span>
+      <a class="button" title="Remove mapping and merge value with another">x</a>
+    </li>
+  </template>
+  <template id="mapping-new">
+    <li class="mapping-action">
+      <a class="button" title="Create new mapping entry">+</a>
+    </li>
+  </template>
+  <template id="mapping-simplify">
+    <li class="mapping-action">
+      <a class="button" title="Simplify mapping entries">S</a>
+    </li>
+  </template>
+  <ul id="mapping">
+    <li class="mapping-item">
+      <input class="key" type="radio" name="pattern-mapping" data-text="0">
+      <span class="value">
+        <select value="">
+          <option value="" selected>-</option>
+          <option value="K">K</option>
+          <option value="P">P</option>
+          <option value="L">L</option>
+          <option value="R">R</option>
+          <option value="T">T</option>
+          <option value="M">M</option>
+        </select>
+      </span>
+      <a class="button">x</a>
+    </li>
+    <li class="mapping-item">
+      <input class="key" type="radio" name="pattern-mapping" data-text="1" checked>
+      <span class="value">
+        <select value="K">
+          <option value="">-</option>
+          <option value="K" selected>K</option>
+          <option value="P">P</option>
+          <option value="L">L</option>
+          <option value="R">R</option>
+          <option value="T">T</option>
+          <option value="M">M</option>
+        </select>
+      </span>
+      <a class="button">x</a>
+    </li>
+    <li class="mapping-new"><a class="button" title="Create new mapping entry">+</a></li>
+  </ul>
+</div>

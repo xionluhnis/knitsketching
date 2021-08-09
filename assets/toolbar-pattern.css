@@ -1,0 +1,257 @@
+/** Toolbar / Pattern Mode */
+
+/* Action button */
+#draw-pattern               { background-image: url(icons/draw.png); }
+#draw-pattern:checked       { background-image: url(icons/white_draw.png); }
+
+/* Layer UI */
+#layer-group #active-layer {
+  line-height: 1.2em;
+  border: 3px solid #eee;
+  border-radius: 7px;
+  cursor: default;
+  font-size: 1.2em;
+  display: inline-block;
+  max-width: 200px;
+  margin-bottom: -7px; /* black magic */
+  overflow: hidden;
+  white-space: nowrap;
+}
+#pattern-layers {
+  display: flex;
+  flex-flow: row;
+  margin: 0;
+  padding: 0;
+}
+#pattern-layers li {
+  padding: 5px 10px;
+  display: flex;
+  flex-flow: row;
+}
+#pattern-layers li.active {
+  background: #9F9;
+}
+#pattern-layers li .node {
+  margin-right: 10px;
+  cursor: default;
+  color: silver;
+}
+#pattern-layers li .name {
+  min-width: 80px;
+  background: rgba(255, 255, 255, 0.5);
+  margin-right: 10px;
+  cursor: text;
+}
+#pattern-layers li .name::before {
+  content: '(' attr(data-index) ') ';
+  color: silver;
+}
+#pattern-layers li .name:empty::before {
+  content: '(' attr(data-index) ') Unnamed';
+  color: silver;
+  font-style: italic;
+}
+#pattern-layers li .type {
+  color: #99F;
+  padding: 0 5px 0 0;
+  cursor: help;
+}
+#pattern-layers [contenteditable="true"] {
+  white-space: nowrap;
+  width: 100px;
+  overflow: hidden;
+} 
+#pattern-layers [contenteditable="true"] br {
+  display:none;
+}
+#pattern-layers [contenteditable="true"] * {
+  display:inline;
+  white-space:nowrap;
+}
+#layer-group:hover .bottom {
+  /* min-width: 300px; */
+  display: flex !important;
+  flex-flow: row;
+}
+#layer-group .bottom ul {
+  min-height: 50px;
+  list-style: none;
+  display: flex;
+  flex-flow: column;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+#layer-group .bottom .right {
+  width: 120px;
+  text-align: center;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-items: center;
+}
+#layer-group .bottom .right * {
+  /* display: inline-block; */
+  padding: 5px 0;
+  margin: 5px;
+}
+#layer-group .bottom .right #load_layer .load-menu {
+  margin-top: -10px;
+  margin-left: 0;
+}
+#layer-group .bottom .right .load-menu #layer-use {
+  color: gray;
+  font-size: 1em;
+}
+#layer-group .bottom .right .load-menu #layer-use:focus {
+  box-shadow: none;
+}
+#layer-group .bottom .right .load-menu #layer-use:hover {
+  color: white;
+  border-radius: 0;
+  border: 0;
+}
+#layer-group .bottom .right input[type=file] {
+  position: absolute;
+  top: -9000px;
+}
+#toolbar .group.disabled .instr {
+  color: silver;
+}
+#toolbar .group.disabled .instr:hover {
+  background: #ecc;
+}
+#toolbar .for-pattern select {
+  background: rgb(0, 164, 255);
+  color: white;
+}
+#toolbar .for-pattern select[disabled] {
+  background: rgba(0, 164, 255, 0.3);
+  cursor: default;
+}
+#layer-group::before {
+  margin-top: -18px !important;
+}
+#pattern-instr {
+  width: 150px;
+}
+#pattern-instr span.instr[title] {
+  cursor: pointer;
+  border-bottom: 0;
+}
+#pattern-instr::before {
+  margin-top: -18px !important;
+}
+#pattern-instr:hover::before {
+  content: '';
+}
+#pattern-instr.disabled:hover::before {
+  content: attr(data-legend);
+}
+hr[data-text]::before {
+  content: attr(data-text);
+  display: block;
+  position: absolute;
+  margin-left: 10px;
+  margin-top: -10px;
+  background: white;
+  color: silver;
+}
+hr[data-text] {
+  border: 0;
+  border-bottom: 2px solid #eee;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#pattern-instr:hover > .top {
+  display: none;
+}
+#pattern-instr:hover .bottom {
+  top: -10px;
+  left: 10px;
+  width: 150px;
+}
+#toolbar .group .instr input {
+  background-size: 80% !important;
+  margin-top: 2px;
+}
+#toolbar .group .instr {
+  display: flex;
+  flex-flow: row;
+  margin: 0;
+  padding: 0;
+  line-height: 36px;
+  width: 100%;
+  text-align: right;
+  background: white;
+  cursor: pointer;
+}
+#toolbar #pattern-instr.group .instr.top {
+  margin-left: 10px;
+}
+#pattern-instr .instr.active {
+  background-color: #FAA;
+}
+#pattern-instr .instr.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+#toolbar .group .instr:hover #instr-0,
+#toolbar .group .instr:hover #instr-move,
+#toolbar .group .instr:hover #instr-resize,
+#toolbar .group .instr:hover {
+  background-color: #F66;
+  color: white;
+}
+#toolbar .group .instr label {
+  flex-grow: 1;
+  padding-right: 7px;
+  cursor: pointer;
+}
+#toolbar .group.disabled,
+#toolbar .group.disabled .instr,
+#toolbar .group.disabled .instr * {
+  cursor: default;
+}
+#toolbar .group .bottom {
+  display: none;
+}
+#toolbar .group:hover .bottom {
+  display: block;
+  position: absolute;
+  background: white;
+  z-index: 3;
+}
+#toolbar .group.disabled {
+  pointer-events: none;
+}
+#toolbar .group.disabled:hover .bottom {
+  display: none;
+}
+
+/* Draw icons */
+
+#instr-1  { background: rgb( 255,   0,  16) url(instructions/K.png); }
+#instr-2  { background: rgb(  43, 206,  72) url(instructions/P.png); }
+#instr-3  { background: rgb( 255, 255, 128) url(instructions/T.png); }
+#instr-4  { background: rgb(  94, 241, 242) url(instructions/M.png); }
+#instr-5  { background: rgb(   0, 129,  69) url(instructions/FR.png); }
+#instr-6  { background: rgb(   0,  92,  49) url(instructions/FR.png); }
+#instr-7  { background: rgb( 255,   0, 190) url(instructions/FL.png); }
+#instr-8  { background: rgb( 194,   0, 136) url(instructions/FL.png); }
+#instr-9  { background: rgb( 126,   0, 149) url(instructions/BR.png); }
+#instr-10 { background: rgb(  96,   0, 112) url(instructions/BR.png); }
+#instr-11 { background: rgb( 179, 179, 179) url(instructions/BL.png); }
+#instr-12 { background: rgb( 128, 128, 128) url(instructions/BL.png); }
+#instr-13 { background: rgb( 255, 230,   6) url(instructions/XRp.png); }
+#instr-14 { background: rgb( 255, 164,   4) url(instructions/XRm.png); }
+#instr-15 { background: rgb(   0, 164, 255) url(instructions/XLp.png); }
+#instr-16 { background: rgb(   0, 117, 220) url(instructions/XLm.png); }
+#instr-17 { background: rgb( 117,  59,  59) url(instructions/S.png); }
+#instr-0                    { background-image: url(icons/clear.png); }
+.instr:hover #instr-0       { background-image: url(icons/white_clear.png); }
+#instr-move                 { background-image: url(icons/move.png); }
+.instr:hover #instr-move    { background-image: url(icons/white_move.png); }
+#instr-resize               { background-image: url(icons/resize.png); }
+.instr:hover #instr-resize  { background-image: url(icons/white_resize.png); }
+

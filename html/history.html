@@ -1,0 +1,28 @@
+<div id="history-editor" class="panel closed">
+  <h2>History</h2>
+  <div class="options">
+    <label for="history-type">When</label>
+    <select id="history-type" value="by-action">
+      <option value="by-action" selected>Every action</option>
+      <option value="by-time">Every 5s</option>
+      <option value="none">No history</option>
+    </select>
+    <label for="history-size">Size</label>
+    <select id="history-size" value="10000">
+      <option value="inf" selected>No limit</option>
+      <option value="10000">10k entries</option>
+      <option value="1000">1000 entries</option>
+      <option value="100">100 entries</option>
+      <option value="10">10 entries</option>
+    </select>
+  </div>
+  <ul id="history">
+    <li>
+      <span class="time">Right now</span>
+      <span class="summary">Initial</span>
+    </li>
+  </ul>
+  <a class="button" id="save_history">Export history</a>
+  <a class="button" id="load_history">Load history</a>
+  <input type="file" id="file_history" accept=".json">
+</div>

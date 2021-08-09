@@ -1,0 +1,250 @@
+/* settings */
+#settings {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  /* max-width: 99%; */
+  min-width: 64px; /* enough for icon to show */
+  height: 64px; /* enough for icon to show */
+  bottom: 0;
+  overflow-y: hidden;
+  display: block;
+}
+#settings:hover {
+  height: calc(100% - 10px); /* show all */
+}
+
+#settings .icon {
+  z-index: 2;
+  position: absolute;
+  right: 0;
+  display: block;
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  background: url(gears.png) no-repeat center center;
+  border: 3px solid #eee;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#settings .wrap {
+  position: relative;
+  background: white;
+  border: 3px solid #eee;
+  display: none;
+  padding: 20px;
+  right: 0;
+  top: 58px;
+  margin-top: 0;
+  margin-right: 5px;
+  overflow-y: scroll;
+  max-height: calc(100% - 40px - 56px - 10px);
+  /* max-height: 90%; */
+  width: 325px;
+}
+#settings .clear {
+  clear: both;
+  display: block;
+}
+#settings .icon:hover + .wrap,
+#settings .wrap:hover {
+  display: flex;
+  /* flex-flow: row-reverse; */
+  flex-flow: column;
+  /* flex-wrap: wrap; */
+  justify-content: space-between;
+}
+#settings:hover .icon {
+  border-bottom: 3px dotted white;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+#settings ul {
+  /* float: right; */
+  list-style: none;
+  margin: 0 10px 20px 10px;
+  padding: 0 10px;
+}
+#settings .expert {
+  display: none;
+}
+.expert #settings .expert {
+  display: flex;
+}
+#settings ul.top {
+  display: flex;
+  flex-direction: column;
+  background: #fdfafa;
+  /* flex-wrap: wrap; */
+  /* flex-basis: 100px; */
+  padding: 10px;
+}
+#settings ul[data-legend]::before {
+  content: attr(data-legend);
+  display: block;
+  color: silver;
+  font-size: 1.2em;
+  border-bottom: 1px solid silver;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  width: 100%;
+}
+#settings ul.top[data-legend]::before {
+  /* border-bottom: 0 !important; */
+  /* border-right: 1px solid silver; */
+  /* padding-right: 10px; */
+  /* padding-bottom: 0 !important; */
+  /* margin-bottom: 0 !important; */
+  align-self: center;
+  /* margin-right: 5px; */
+  width: 100%;
+}
+#settings li {
+  min-height: 25px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 230px;
+  font-size: 0.9em;
+}
+#settings ul > li {
+  border-left: 1px solid #eee;
+  padding-left: 15px;
+  margin-left: 15px;
+}
+#settings ul > li::before {
+  display: block;
+  content: '';
+  width: 9px;
+  height: 15px;
+  margin-left: -12px;
+  position: relative;
+  left: -8px;
+  background: #efefef;
+}
+#settings .top li {
+  margin-left: 5px;
+  /* width: 50%; */
+  flex-grow: 1;
+  /* flex-flow: row-reverse; */
+  flex-grow: 1;
+}
+#settings .top li label {
+  min-width: auto;
+  width: auto;
+  margin-left: 15px;
+}
+/*
+#settings ul.packed {
+  display: flex;
+  flex: row;
+  flex-wrap: wrap;
+}
+#settings .packed li {
+  width: 45%;
+}
+*/
+#settings li label {
+  min-width: 100px;
+  width: 45%;
+  display: inline-block;
+  flex: 0 1 auto;
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+#settings select{
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  appearance: menulist;
+  min-height: 32px;
+  margin: 3px 3px 0 5px;
+}
+#settings input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: white;
+  background:
+  conic-gradient(
+   #fff 0.25turn,
+   #efefef 0.25turn 0.5turn,
+   #fff 0.5turn 0.75turn,
+   #efefef 0.75turn)
+  top left / 100% repeat;
+  border: 3px solid #eee;
+  border-radius: 7px;
+  cursor: pointer;
+  height: 32px;
+  width: 32px;
+  /* margin: 5px 0; */
+}
+#settings input[type=number] {
+    margin: 3px 3px 0 5px;
+    padding-left: 10px;
+    /* max-width: 100px; */
+}
+#settings input:checked {
+  /* content: '\2717'; */
+  background: #F66;
+}
+
+#settings div.custom {
+  display: block;
+  font-size: .8em;
+  color: gray;
+  pointer-events: none;
+}
+#settings div.custom input,
+#settings div.custom select {
+  background: #eee;
+}
+#settings li.custom div.custom {
+  pointer-events: all;
+  color: black;
+}
+#settings li.custom div.custom input,
+#settings li.custom div.custom select {
+  background: white;
+}
+#settings li.separator {
+  border-top: 1px solid silver;
+  min-height: 0;
+  margin: 7px 0;
+}
+#settings input[data-text] {
+  width: auto;
+}
+#settings input,
+#settings select {
+  min-width: 45% !important;
+}
+#settings input {
+  max-width: 50% !important;
+}
+#settings select {
+  max-width: 70% !important;
+}
+#settings input.small {
+  min-width: auto !important;
+}
+#settings input[type=checkbox].small {
+  max-width: 25% !important;
+}
+#settings input[type=number].small {
+  max-width: 35% !important;
+}
+#settings input[type=checkbox].small + input.small {
+  pointer-events: none;
+  color: #ccc;
+  background: #eee;
+}
+#settings input[type=checkbox].small:checked + input.small {
+  pointer-events: all;
+  color: inherit;
+  background: inherit;
+}

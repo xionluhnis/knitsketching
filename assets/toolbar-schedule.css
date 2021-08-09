@@ -1,0 +1,39 @@
+/** Schedule UI */
+
+#stitch-range,
+#node-range {
+  display: none;
+  width: 64px;
+  height: 32px;
+  opacity: 0.7;
+  margin: 0 0 0 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  float: right;
+  /*
+  appearance: none;
+  width: 64px;
+  height: 24px;
+  background: 
+  */
+}
+#stitch-range:hover,
+#node-range:hover {
+  opacity: 1.0;
+}
+#stitch-slice:checked + #stitch-range,
+#show-node:checked + #node-range {
+  display: inline-block;
+}
+
+#stitch-slice,
+#show-node,
+#show-query {
+  display: none;
+}
+
+.verbose #stitch-slice,
+.verbose #show-node,
+.verbose #show-query {
+  display: inline-block;
+}

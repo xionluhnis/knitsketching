@@ -1,0 +1,62 @@
+{
+  "name": "knitsketching",
+  "version": "0.0.1",
+  "description": "Knit sketching interface",
+  "main": "src/ui.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "3d-force-graph": "^1.55.9",
+    "@kninnug/constrainautor": "^1.0.0",
+    "@tyriar/fibonacci-heap": "^2.0.9",
+    "bezier-js": "^2.4.3",
+    "browserify": "^16.5.0",
+    "canvas2svg": "github:gliffy/canvas2svg",
+    "chroma-js": "^2.0.6",
+    "concretejs": "^3.0.5",
+    "d3": "^5.11.0",
+    "data-uri-to-buffer": "^3.0.1",
+    "delaunator": "^4.0.1",
+    "faucet": "0.0.1",
+    "force-graph": "^1.18.2",
+    "gulp": "^4.0.2",
+    "gulp-html-tag-include": "^1.0.1",
+    "jszip": "^3.2.2",
+    "moment": "^2.24.0",
+    "pairing-heap": "^1.0.0",
+    "png-js": "^0.1.1",
+    "require-globify": "^1.4.1",
+    "simplenoise": "^1.0.1",
+    "tape": "^5.0.1",
+    "three": "^0.110.0",
+    "tinyify": "^2.5.1",
+    "upng-js": "^2.1.0",
+    "watchify": "^3.11.1",
+    "webworkify": "^1.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build-html": "gulp -f html/build.js build",
+    "build-js": "browserify src/ui.js -t require-globify > js/sketching.js",
+    "build": "npm run build-html && npm run build-js",
+    "build-tiny": "browserify src/ui.js -t require-globify --plugin tinyify > js/sketching.js",
+    "watch-js": "watchify src/ui.js --debug -t require-globify -o js/sketching.js -v",
+    "watch-html": "gulp -f html/build.js",
+    "watch": "(trap 'kill 0' 0; npm run watch-js & npm run watch-html)",
+    "test": "faucet && echo '\\nAll tests passed!' || echo 'Some test failed'",
+    "serve": "python -m SimpleHTTPServer 7000 || python3 -m http.server 7000 || python -m http.server 7000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/xion.luhnis/knitsketching.git"
+  },
+  "keywords": [
+    "knitting"
+  ],
+  "author": "Alexandre Kaspar",
+  "bugs": {
+    "url": "https://gitlab.com/xion.luhnis/knitsketching/issues"
+  },
+  "homepage": "https://gitlab.com/xion.luhnis/knitsketching#README"
+}

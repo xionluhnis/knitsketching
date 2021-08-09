@@ -1,0 +1,118 @@
+<?doctype html>
+<html>
+  <head>
+    <title>Procedural Knitting Editor</title>
+    <!-- styles -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="libs/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="libs/codemirror/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="libs/codemirror/addon/search/matchesonscrollbar.css">
+    <link rel="stylesheet" href="libs/dialog/dialog-polyfill.css" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <dialog id="loadfile"></dialog>
+    <div id="editor">
+      <div class="files">
+        <div class="button load-action" id="load_action">
+          Load
+          <div class="load-menu">
+            <a class="file" id="load">from file</a>
+            <a class="file" id="load_server">from server</a>
+            <!-- <select class="button" id="use"><option value="">from server</option></select> -->
+          </div>
+        </div>
+        <a class="button rounded" id="save">Save</a>
+        <input type="file" id="file" accept=".sk,.svg,.sketch,.json,.k">
+        <input type="file" id="file-add" accept=".sk,.svg,.sketch,.json,.k">
+      </div>
+      <div id="context" class="sidebar">
+        <input type="radio" name="output" class="tab" data-mode="sketch" data-text="Sketch" checked>
+        <input type="radio" name="output" class="tab" data-mode="knitout" data-text="Knitout">
+        <!--
+          <input type="radio" name="output" class="tab" data-mode="simulation" data-text="Sim">
+        -->
+        <input type="radio" name="output" class="tab" data-mode="yarn" data-text="Yarn">
+      </div>
+      <div id="sidebar" class="sidebar">
+        <div class="tab rounded" data-panel="simulation-editor">Sim</div>
+        <div class="tab rounded" data-panel="knitout-editor">Knitout</div>
+        <div class="tab rounded" data-panel="parametric-editor">Parametric</div>
+        <div class="tab rounded" data-panel="program-editor">Programs</div>
+        <div class="tab rounded" data-panel="pattern-editor">Pattern</div>
+        <!-- <div class="tab rounded" data-panel="properties-editor">Props</div> -->
+        <div class="tab rounded" data-panel="history-editor">History</div>
+      </div>
+    </div>
+    <div id="output" class="sketch">
+      <!-- Toolbar -->
+      <include src="./toolbar.html"></include>
+
+      <!-- Output layers -->
+      <div id="textui" class="for-sketch">
+        <template id="output-text-entry">
+          <div class="entry">
+            <span class="message"></span>
+            <span class="count"></span>
+          </div>
+        </template>
+        <input type="checkbox" id="output-text-state" checked>
+        <div id="output-text">No error</div>
+        <input type="checkbox" id="output-user-state" checked>
+        <div id="output-user">Zoom: 100</div>
+      </div>
+      <div id="output-sketch"></div>
+      <div id="output-knitout"></div>
+      <div id="output-yarn">
+        <h2>Settings Editor</h2>
+        <div class="options">
+          <label for="settings_target">Target</label>
+          <select id="settings_target">
+            <option value="sizing">Yarn Sizing</option>
+            <option value="carriers">Yarn Carriers</option>
+          </select>
+          <a class="button" id="load_settings">Load</a>
+          <a class="button" id="save_settings">Save</a>
+          <input type="file" id="file_settings" accept=".json">
+        </div>
+        <textarea id="settings_editor" class="texteditor" placeholder="Write your configuration here"
+            rows="20">{}</textarea>
+        <div class="info" id="settings_info"></div>
+      </div>
+    </div>
+
+    <!-- History panel -->
+    <include src="./history.html"></include>
+
+    <!-- Program panel -->
+    <include src="./program.html"></include>
+
+    <!-- Parametric curve panel -->
+    <include src="./parametric.html"></include>
+
+    <!-- Knitout panel -->
+    <include src="./knitout.html"></include>
+
+    <!-- Simulation panel -->
+    <include src="./simulation.html"></include>
+
+    <!-- Pattern panel -->
+    <include src="./pattern.html"></include>
+
+    <!-- Properties panel-->
+    <include src="./properties.html"></include>
+
+    <script type="text/javascript" src="js/sketching.js"></script>
+    <script type="text/javascript" src="libs/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/dialog/dialog.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/searchcursor.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/search.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/scroll/annotatescrollbar.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/matchesonscrollbar.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/search/jump-to-line.js"></script>
+    <script type="text/javascript" src="libs/codemirror/mode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="assets/codemirror/knitout.js"></script>
+    <script type="text/javascript" src="libs/dialog/dialog-polyfill.js"></script>
+  </body>
+</html>

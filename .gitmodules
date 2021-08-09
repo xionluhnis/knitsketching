@@ -1,0 +1,9 @@
+[submodule "libs/nlopt"]
+	path = libs/nlopt
+	url = git://github.com/stevengj/nlopt
+[submodule "libs/geometry-central"]
+	path = libs/geometry-central
+  url = https://github.com/nmwsharp/geometry-central.git
+[submodule "libs/autoknit"]
+	path = libs/autoknit
+	url = https://github.com/textiles-lab/autoknit

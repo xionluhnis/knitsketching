@@ -1,0 +1,64 @@
+/** Style of all panels */
+.panel {
+  background: rgb(250, 212, 213);
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 70px;
+  min-width: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.panel.closed {
+  display: none;
+}
+.panel a.hide,
+.panel a.left,
+.panel a.right,
+.panel a.overlay {
+  float: right;
+  cursor: pointer;
+  margin-left: 5px;
+  text-align: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgb(250, 212, 213);
+}
+.panel a.hide:hover,
+.panel a.left:hover,
+.panel a.right:hover,
+.panel a.overlay:hover {
+  border: 1px solid white;
+  text-decoration: none;
+}
+.panel.overlay a.overlay {
+  background: #FF666666;
+}
+.panel a.hide:before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  display: block;
+  background: url(hide.png) center center no-repeat;
+  background-size: contain;
+}
+.panel.right {
+  left: unset;
+  right: 0;
+}
+.panel .left {
+  display: none;
+}
+.panel.right .right {
+  display: none;
+}
+.panel.right .left {
+  display: initial;
+}
+.panel.overlay {
+  opacity: 0.6;
+}
+.panel.overlay:hover {
+  opacity: 1.0;
+}

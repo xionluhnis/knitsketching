@@ -1,0 +1,33 @@
+/**
+ * Layout editor
+ */
+#layout-editor select,
+#layout-editor option {
+  text-transform: capitalize;
+}
+#layout_list {
+  padding: 0;
+}
+#layout_list li {
+  display: inline-block;
+  list-style: none;
+  margin: 0 10px;
+  display: inline-block;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+}
+#layout_list li:before {
+  content: '#' attr(data-number);
+  width: 25px;
+  display: inline-block;
+  color: #aaa;
+  border: 3px solid #ccc;
+  border-radius: 25px;
+  padding: 5px 5px 5px 10px;
+  margin-right: 10px;
+}
+#layout_list li input {
+  font-size: 1em;
+  width: 4em;
+}
