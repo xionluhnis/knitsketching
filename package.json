@@ -45,6 +45,7 @@
     "watch-js": "watchify src/ui.js --debug -t require-globify -t brfs -o js/sketching.js -v",
     "watch-html": "gulp -f html/build.js",
     "watch": "(trap 'kill 0' 0; npm run watch-js & npm run watch-html)",
+    "link": "if [ ! -e knitsketching ]; then ln -s . knitsketching; echo 'Symlink created as knitsketching'; else echo 'Symlink exists already'; fi",
     "test": "faucet && echo '\\nAll tests passed!' || echo 'Some test failed'",
     "serve": "python -m SimpleHTTPServer 7000 || python3 -m http.server 7000 || python -m http.server 7000"
   },
