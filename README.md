@@ -9,7 +9,7 @@ The project page is there: http://knitsketching.csail.mit.edu/
 This implementation deviates slightly from the paper description.
 Notably, it adds support for layer metadata that describes patterns and colorwork on top of the sketches.
 
-This is a prototype, so expect bugs.
+This is a prototype; expect bugs.
 
 ## Dependencies
 
@@ -37,12 +37,13 @@ If you want to compile the system, you can use npm scripts:
 The system uses a few WebAssembly modules as well as file capabilities (and serving capabilities) that require the environment to be served through a server instead of directly from the file system.
 Some functionalities are working without server, but not all (and it's tested only from the served variant).
 
-**Note**: the default system is served assuming the base path `/knitsketching`.
-If this is not the case, you have two options:
-1. Use `npm run link` to creates the necessary symlink, or
-2. Change the base path in `basepath.json` and build again to take it into account.
+Upon cloning the repository, a preliminary linking step is necessary to setup the base path (needed only once).
+This can be done by creating a symlink with:
+```
+npm run link
+```
 
-Assuming the base path is properly setup, the simplest way to serve the files is then using the script
+Assuming the base path is properly setup, the simplest way to serve the files is then with the script
 ```bash
 npm run serve
 ```
@@ -76,6 +77,21 @@ http://localhost:7000/index.html?loadPath=sketches/sweater/sweater.json&init=ske
 - sets the *isoline threshold* parameter to 1
 - switches the geodesic mode parameter to `heat`
 
+Another useful example:
+```
+http://localhost:7000/?init=click:load_server
+```
+triggers the server load file dialog that displays the available files from the demo.
+
+### Base path
+
+The default system is served assuming the base path `/knitsketching` (because this is the path used for the online demo on Github pages).
+However, when serving locally from a fresh repository, this is not the case, and thus the need to create a symlink `knitsketching` that points to the base directory itself.
+
+There are technically two ways to fix this:
+1. Use `npm run link` to creates the necessary symlink (*suggested by default*), or
+2. Change the base path in `basepath.json` and rebuild the system to take it into account.
+
 ## Third party libraries
 
 This project is making use of many third-party libraries for its development.
@@ -108,6 +124,13 @@ Upon pressing "Program", the rest of the pipeline is triggered, which samples th
 
 To save the `.k` file, switch to the knitout output tab on the left and press "Save".
 Note that if you do not switch tab, clicking the button saves the `.json` file corresponding to the sketch.
+
+
+## Issues and debugging
+
+The default code is built in debug mode so that sourcemaps are encoded in the output.
+If you open the developer tools (e.g., on chrome or firefox), then you can get useful information in case something unexpected happens (or the system fails at providing an expected result).
+
 
 ## References
 
